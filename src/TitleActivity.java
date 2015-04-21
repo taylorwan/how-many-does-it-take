@@ -21,7 +21,15 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-
+/*
+ * 
+ * Problems to look at, how to nest panels?
+ * It seems we can't add a new panel to the
+ * content pane w/o losing the background picture
+ * we are having issues adequitly resising the 
+ * components to make them work with a grid layout
+ * 
+ */
 public class TitleActivity extends JPanel implements ActionListener
 {
 	private Application application;
@@ -98,12 +106,17 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	public void initGUI()
 	{
+		container = application.getContentPane();
+		container.setLayout(new BorderLayout());
+		
+		container.add(this);
 		Dimension d = new Dimension(100,100);
 		nameLabel.setSize(d);
 		form.add(nameLabel);
 		nameInputBox.setSize(d);
 		form.add(nameInputBox);
-		application.getContentPane().add(form);
+		container.add(form, BorderLayout.WEST);
+		//application.getContentPane().add(form);
 	}
 	
 	public void begin() throws InterruptedException 
