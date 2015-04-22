@@ -2,15 +2,18 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-public class MainActivity extends JPanel
+public class MainActivity extends JPanel implements ActionListener
 {
 	//Main application for Activity Navigation
 	private Application application;
@@ -35,6 +38,12 @@ public class MainActivity extends JPanel
 	private JTextField shotInput;
 	private JTextField cocktailInput;
 	
+	//Add Buttons
+	private JButton addBeer;
+	private JButton addWhine;
+	private JButton addShot;
+	private JButton addCocktail;
+	
 	
 	//Constant Strings
 	final static String bacLabelString = "BAC: ";
@@ -54,6 +63,12 @@ public class MainActivity extends JPanel
 		//a custom container exclusive to MainActivity
 		application = passedApplication;
 		container = application.getContentPane();
+		
+		create();
+	}
+	
+	private void create()
+	{
 		
 		//Create JPanel to hold participant information
 		participantInfo = new JPanel();
@@ -80,6 +95,13 @@ public class MainActivity extends JPanel
 		shotInput = new JTextField(5);
 		cocktailInput = new JTextField(5);
 		
+		//Create buttons
+		addBeer = new JButton("ADD BEER");
+		addBeer.addActionListener(this);
+		addWhine = new JButton("ADD WHINE");
+		addShot = new JButton("ADD SHOT");
+		addCocktail = new JButton("ADD COCKTAIL");
+		
 	}
 	
 	private void initGUI()
@@ -93,12 +115,19 @@ public class MainActivity extends JPanel
 		//Add alcohol labels with corresponding inputs
 		alcoholMenu.add(beerLabel);
 		alcoholMenu.add(beerInput);
+		alcoholMenu.add(addBeer);
+		
 		alcoholMenu.add(whineLabel);
 		alcoholMenu.add(whineInput);
+		alcoholMenu.add(addWhine);
+		
 		alcoholMenu.add(shotLabel);
 		alcoholMenu.add(shotInput);
+		alcoholMenu.add(addShot);
+		
 		alcoholMenu.add(cocktailLabel);
 		alcoholMenu.add(cocktailInput);
+		alcoholMenu.add(addCocktail);
 		
 		
 		//Work with container
@@ -148,5 +177,34 @@ public class MainActivity extends JPanel
 		bacLabel.setText(bacLabelString + participant.getCurrentBAC());
 		caloriesLabel.setText(caloriesLabelString + participant.getCurrentCalories());
 	}
+	
+	//Implemented Action Listener Function
+	public void actionPerformed(ActionEvent evt) 
+	{
+		
+        String command = evt.getActionCommand();
+        
+        //If user chooses to add beer
+        if (command.equals("ADD BEER"))
+        {
+        	
+        	//Get new number of beers
+        	int beersToAdd = Integer.parseInt( beerInput.getText() );
+        	
+        	//Give participant the beers
+        	participant.setCurrentBeers(participant.getCurrentBeers() + beersToAdd);
+        	
+        	//Set participant calories
+        	participant.setCurrentBAC(HealthCalculator.calculateBAC(participant));
+        	
+        	//Set a new text
+        	bacLabel.setText(bacLabelString + participant.getCurrentBAC());
+        	
+        	//Reset the input text
+        	beerInput.setText("");
+        	
+        }
+
+     } // end actionPerformed()
 	
 }

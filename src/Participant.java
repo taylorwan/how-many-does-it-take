@@ -84,6 +84,11 @@ public class Participant
 		return currentBeers;
 	}
 	
+	public void setCurrentBeers(int numberOfBeers)
+	{
+		currentBeers = numberOfBeers;
+	}
+	
 	public int getCurrentWhine()
 	{
 		return currentWhine;
@@ -99,15 +104,21 @@ public class Participant
 		return currentCocktails;
 	}
 	
-	public double getCurrentCalories()
+	public int getCurrentCalories()
+	{
+		return currentCalories;
+	}
+	
+	public double getCurrentBAC()
 	{
 		return currentBAC;
 	}
 	
-	public int getCurrentBAC()
+	public void setCurrentBAC(double passedBAC)
 	{
-		return currentCalories;
+		currentBAC = passedBAC;
 	}
+
 	
 	
 }
