@@ -43,7 +43,13 @@ public class MainActivity extends JPanel
 	
 	private void initGUI()
 	{
-		//Set the layout for container
+		container.setLayout(new BorderLayout());
+		
+		//Add labels
+		participantInfo.add(bacLabel);
+		participantInfo.add(caloriesLabel);
+		
+		//Work with container
 		container.setLayout(new BorderLayout());
 		container.add(participantInfo, BorderLayout.SOUTH);
 	}
@@ -55,6 +61,27 @@ public class MainActivity extends JPanel
 		//thisGraphic.drawImage(backgroundImage, -187, 0, this);
 	}
 	
+	//Makes panel visible and sets applications
+	//current activity
+	public void activate()
+	{
+		//Reinitallize the GUI
+		initGUI();
+		
+		//Set the current Activity
+		application.setCurrentActivity(Application.CURRENT_ACTIVITY.MAIN);
+		
+		//Make container visible
+		container.setVisible(true);
+	}
+	
+	//Call before changing activities
+	public void deactivate()
+	{
+		container.removeAll();
+		container.setVisible(true);
+	}
+	
 	public void begin()
 	{
 		repaint();
@@ -63,6 +90,8 @@ public class MainActivity extends JPanel
 	public void setParticipant(Participant passedParticipant)
 	{
 		participant = passedParticipant;
+		bacLabel.setText(bacLabelString + participant.getCurrentBAC());
+		caloriesLabel.setText(caloriesLabelString + participant.getCurrentCalories());
 	}
 	
 }

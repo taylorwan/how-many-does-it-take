@@ -34,18 +34,26 @@ import javax.swing.JTextField;
 public class TitleActivity extends JPanel implements ActionListener
 {
 	private Application application;
+	private MainActivity mainActivity;
 	private JPanel form;
 	private JPanel switchActivities;
 	
+	//Background
 	private Image backgroundImage;
-	private MainActivity mainActivity;
+	
+	//Buttons
 	private JTextField weightInputBox;
 	private JTextField nameInputBox;
 	
+	//Radio buttons
 	private ButtonGroup genderButtons;
 	private JRadioButton maleButton;
 	private JRadioButton femaleButton;
+	
+	//Combo Box
 	private JComboBox<String> hoursMenu;
+	
+	//Start Button
 	private JButton startButton;
 	
 	//Associative texts for the form
@@ -63,10 +71,11 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	private Container container;
 	
-	public TitleActivity(final String filePath, final Application passedApplication) throws IOException
+	public TitleActivity(final String filePath, Application passedApplication, MainActivity passedMainActivity) throws IOException
 	{
 		//Set the application and other important components
 		application = passedApplication;
+		mainActivity = passedMainActivity;
 		backgroundImage = Toolkit.getDefaultToolkit().getImage(filePath);
 		
 		//Create input text fields
@@ -76,6 +85,7 @@ public class TitleActivity extends JPanel implements ActionListener
 		
 		//Buttons and button group
 		startButton = new JButton(startString);
+		startButton.addActionListener(this);
 		genderButtons = new ButtonGroup();
 		maleButton = new JRadioButton(maleString);
 		maleButton.setSelected(true);
@@ -95,8 +105,8 @@ public class TitleActivity extends JPanel implements ActionListener
 		switchActivities.setVisible(true);
 		
 		//This container will hold the title layout
-		//container = mainActivity.getContentPane();
-		//container.setLayout(new BorderLayout());
+		container = application.getContentPane();
+		container.setLayout(new BorderLayout());
 		
 		
 		//Drop down menu
@@ -111,7 +121,6 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	public void initGUI()
 	{
-		container.removeAll();
 		container.setLayout(new BorderLayout());
 		application.getContentPane().add(this);
 		
@@ -186,6 +195,7 @@ public class TitleActivity extends JPanel implements ActionListener
         //All data from the form
         if (command.equals("Start"))
         {
+        	
         	if( weightIsGood() && nameIsGood() )
         	{
             	//Create Participant variables
@@ -205,11 +215,16 @@ public class TitleActivity extends JPanel implements ActionListener
             	
             	//Create participant
             	Participant participant = new Participant(pName, pWeight, pGender);
-            	mainActivity.setParticipant(participant);
-            	application.setCurrentActivity(Application.CURRENT_ACTIVITY.MAIN);
             	
-            	//Hide main screen
-            	this.setVisible(false);
+            	//Give the main activity the participant
+            	mainActivity.setParticipant(participant);
+            	
+            	//Deactivate current activity
+        		container.setVisible(false);
+        		container.removeAll();
+            	
+            	//Activate main activity
+            	mainActivity.activate();
         	}
         	
         }

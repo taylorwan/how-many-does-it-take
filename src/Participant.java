@@ -7,8 +7,11 @@ public class Participant
 	public enum GENDER{MALE, FEMALE};
 	private GENDER gender;
 	
+	//Calculated specific values
 	private double currentBAC;
 	private int currentCalories;
+	
+	
 	private int totalDrinks;
 	private int hoursDrinking;
 	
@@ -22,9 +25,15 @@ public class Participant
 	
 	public Participant(final String passedName, final int passedWeight, final GENDER passedGender)
 	{
+		
+		//Set participant specifics
 		name = passedName;
 		weight = passedWeight;
 		gender = passedGender;
+		
+		//Defaults
+		currentBAC = 0.00;
+		currentCalories = 0;
 		
 		//Instantiate all totals to 0
 		currentBeers = currentShots = currentCocktails = currentWhine = 0;
@@ -88,6 +97,16 @@ public class Participant
 	public int getCurrentCocktails()
 	{
 		return currentCocktails;
+	}
+	
+	public double getCurrentCalories()
+	{
+		return currentBAC;
+	}
+	
+	public int getCurrentBAC()
+	{
+		return currentCalories;
 	}
 	
 	

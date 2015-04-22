@@ -37,7 +37,7 @@ public class Application extends JFrame
 		
 		//Create all activities and current activity
 		mainActivity = new MainActivity(this);
-		titleActivity = new TitleActivity(titleActivityFilePath, this);
+		titleActivity = new TitleActivity(titleActivityFilePath, this, mainActivity);
 		currentActivity = CURRENT_ACTIVITY.TITLE;
 	}
 	
@@ -62,10 +62,8 @@ public class Application extends JFrame
 		//Try application
 		try
 		{	
-			System.out.println("TRY BLOCK");
-			
+			//Create the application and run it
 			Application application = new Application();
-			System.out.println("app");
 			application.runApp();
 		}
 		catch(IOException e)
@@ -100,6 +98,7 @@ public class Application extends JFrame
 						titleActivity.begin();
 						break;
 					case MAIN:
+						
 						mainActivity.begin();
 						break;
 				}
