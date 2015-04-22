@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -34,6 +35,7 @@ public class TitleActivity extends JPanel implements ActionListener
 {
 	private Application application;
 	private JPanel form;
+	private JPanel switchActivities;
 	
 	private Image backgroundImage;
 	private MainActivity mainActivity;
@@ -83,12 +85,14 @@ public class TitleActivity extends JPanel implements ActionListener
 		nameLabel = new JLabel("NAME");
 		weightLabel = new JLabel("WEIGHT");
 		genderLabel = new JLabel("GENDER");
-		hourLabel = new JLabel("EST. HOURS DRINKING");
+		hourLabel = new JLabel("HRS");
 		
 		//This contains form input 
-		form = new JPanel(new GridLayout(4,2));
-		form.setBounds(100, 100, 400, 400);
+		form = new JPanel(new FlowLayout());
 		form.setVisible(true);
+		
+		switchActivities = new JPanel(new FlowLayout());
+		switchActivities.setVisible(true);
 		
 		//This container will hold the title layout
 		//container = mainActivity.getContentPane();
@@ -100,23 +104,43 @@ public class TitleActivity extends JPanel implements ActionListener
 		hoursMenu = new JComboBox<String>(hourOptions);
 		
 		application.getContentPane().add(this);
+		
 		//Create the GUI
 		initGUI();
 	}
 	
 	public void initGUI()
 	{
-		container = application.getContentPane();
+		container.removeAll();
 		container.setLayout(new BorderLayout());
+		application.getContentPane().add(this);
 		
-		container.add(this);
-		Dimension d = new Dimension(100,100);
+		
+		genderButtons.add(maleButton);
+		genderButtons.add(femaleButton);
+		
+		
+		Dimension d = new Dimension(50,50);
 		nameLabel.setSize(d);
+		weightLabel.setSize(d);
 		form.add(nameLabel);
 		nameInputBox.setSize(d);
+		weightInputBox.setSize(d);
+		startButton.setSize(d);
+		Color color = new Color(0,0,0,0);
 		form.add(nameInputBox);
-		container.add(form, BorderLayout.WEST);
-		//application.getContentPane().add(form);
+		form.add(weightLabel);
+		form.add(weightInputBox);
+		form.add(genderLabel);
+		form.add(maleButton);
+		form.add(femaleButton);
+		form.add(hourLabel);
+		form.add(hoursMenu);
+		form.setBackground(Color.GRAY);
+		switchActivities.add(startButton);
+		
+		container.add(form, BorderLayout.SOUTH);
+		container.add(switchActivities, BorderLayout.CENTER);
 	}
 	
 	public void begin() throws InterruptedException 
@@ -129,7 +153,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	protected void paintComponent(Graphics thisGraphic)
 	{
 		super.paintComponent(thisGraphic);
-		thisGraphic.drawImage(backgroundImage, 0, 0, this);
+		//thisGraphic.drawImage(backgroundImage, -187, 0, this);
 	}
 	
 	private boolean weightIsGood()

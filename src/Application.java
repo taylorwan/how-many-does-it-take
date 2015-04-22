@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.io.IOException;
 
@@ -25,6 +26,7 @@ public class Application extends JFrame
 	//Application constructor
 	public Application() throws IOException
 	{
+		
 		create();
 		initGUI();
 	}
@@ -45,6 +47,8 @@ public class Application extends JFrame
 		
 		//Init GUI components of the JFrame
 		setLocation(100,100);
+		Color color = new Color(0,0,0,0);
+		setForeground(color);
 		setSize(screenWidth, screenHeight);
 		setResizable(false);
 		setVisible(true);
@@ -54,22 +58,30 @@ public class Application extends JFrame
 	//Main processing function
 	public static void main(String[] args) 
 	{
-		//Declare application
-		Application application = null;
 		
 		//Try application
 		try
 		{	
-			application = new Application();
+			System.out.println("TRY BLOCK");
+			
+			Application application = new Application();
+			System.out.println("app");
 			application.runApp();
 		}
 		catch(IOException e)
 		{
+			System.out.println("io exception");
 			System.out.println(e.getMessage());
 		}
 		catch(InterruptedException i)
 		{
+			System.out.println("interrupted exception");
 			System.out.println(i.getMessage());
+		}
+		catch(NullPointerException n)
+		{
+			System.out.println("null exception");
+			System.out.println(n.getMessage());
 		}
 
 	}
