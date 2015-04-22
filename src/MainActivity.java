@@ -3,9 +3,11 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 
 public class MainActivity extends JPanel
@@ -16,11 +18,32 @@ public class MainActivity extends JPanel
 	
 	//Panel for holding participant info
 	private JPanel participantInfo;
+	private JPanel alcoholMenu;
+	private JLabel nameLabel;
 	private JLabel bacLabel;
 	private JLabel caloriesLabel;
 	
+	//JLabel for names of alcohol
+	private JLabel beerLabel;
+	private JLabel whineLabel;
+	private JLabel shotLabel;
+	private JLabel cocktailLabel;
+	
+	//Inputs for alcohols
+	private JTextField beerInput;
+	private JTextField whineInput;
+	private JTextField shotInput;
+	private JTextField cocktailInput;
+	
+	
+	//Constant Strings
 	final static String bacLabelString = "BAC: ";
 	final static String caloriesLabelString = "CALORIES: ";
+	final static String beerLabelString = "ADD BEER(S)";
+	final static String whineLabelString = "ADD WHINE";
+	final static String shotLabelString = "ADD SHOT(S)";
+	final static String cocktailLabelString = "ADD COCKTAIL(S)";
+	final static String helloMessage = "Hello ";
 	
 	//Participant
 	private Participant participant;
@@ -36,22 +59,53 @@ public class MainActivity extends JPanel
 		participantInfo = new JPanel();
 		participantInfo.setLayout(new FlowLayout());
 		
+		//Alcohol panel on the right?
+		alcoholMenu = new JPanel();
+		alcoholMenu.setLayout(new BoxLayout(alcoholMenu, BoxLayout.Y_AXIS));
+		
 		//Create the labels, which later will be dynamic
 		bacLabel = new JLabel(bacLabelString);
 		caloriesLabel = new JLabel(caloriesLabelString);
+		nameLabel = new JLabel(helloMessage);
+		
+		//Alcohol labels
+		beerLabel = new JLabel(beerLabelString);
+		whineLabel = new JLabel(whineLabelString);
+		shotLabel = new JLabel(shotLabelString);
+		cocktailLabel = new JLabel(cocktailLabelString);
+		
+		//Alcohol Inputs
+		beerInput = new JTextField(5);
+		whineInput = new JTextField(5);
+		shotInput = new JTextField(5);
+		cocktailInput = new JTextField(5);
+		
 	}
 	
 	private void initGUI()
 	{
 		container.setLayout(new BorderLayout());
 		
-		//Add labels
+		//Add labels for participant
 		participantInfo.add(bacLabel);
 		participantInfo.add(caloriesLabel);
 		
+		//Add alcohol labels with corresponding inputs
+		alcoholMenu.add(beerLabel);
+		alcoholMenu.add(beerInput);
+		alcoholMenu.add(whineLabel);
+		alcoholMenu.add(whineInput);
+		alcoholMenu.add(shotLabel);
+		alcoholMenu.add(shotInput);
+		alcoholMenu.add(cocktailLabel);
+		alcoholMenu.add(cocktailInput);
+		
+		
 		//Work with container
 		container.setLayout(new BorderLayout());
+		container.add(nameLabel, BorderLayout.NORTH);
 		container.add(participantInfo, BorderLayout.SOUTH);
+		container.add(alcoholMenu, BorderLayout.EAST);
 	}
 	
 	@Override
@@ -90,6 +144,7 @@ public class MainActivity extends JPanel
 	public void setParticipant(Participant passedParticipant)
 	{
 		participant = passedParticipant;
+		nameLabel.setText(helloMessage + participant.getName());
 		bacLabel.setText(bacLabelString + participant.getCurrentBAC());
 		caloriesLabel.setText(caloriesLabelString + participant.getCurrentCalories());
 	}
