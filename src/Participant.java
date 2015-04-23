@@ -94,9 +94,19 @@ public class Participant
 		return currentWhine;
 	}
 	
+	public void setCurrentWhine(int numberOfWhines)
+	{
+		currentWhine = numberOfWhines;
+	}
+	
 	public int getCurrentShots()
 	{
 		return currentShots;
+	}
+	
+	public void setCurrentShots(int numberOfShots)
+	{
+		currentShots = numberOfShots;
 	}
 	
 	public int getCurrentCocktails()
@@ -104,9 +114,19 @@ public class Participant
 		return currentCocktails;
 	}
 	
+	public void setCurrentCocktails(int numberOfCocktails)
+	{
+		currentCocktails = numberOfCocktails;
+	}
+	
 	public int getCurrentCalories()
 	{
 		return currentCalories;
+	}
+	
+	public void setCurrentCalories(int passedCalories)
+	{
+		currentCalories = passedCalories;
 	}
 	
 	public double getCurrentBAC()
