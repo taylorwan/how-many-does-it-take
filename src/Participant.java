@@ -11,14 +11,13 @@ public class Participant
 	private double currentBAC;
 	private int currentCalories;
 	
-	
-	private int totalDrinks;
+	//Amount of hours intended drinking
 	private int hoursDrinking;
 	
 	//Holds values of all current beverages consumed
 	private int currentBeers;
 	private int currentShots;
-	private int currentWhine;
+	private int currentWine;
 	private int currentCocktails;
 	
 	
@@ -36,7 +35,7 @@ public class Participant
 		currentCalories = 0;
 		
 		//Instantiate all totals to 0
-		currentBeers = currentShots = currentCocktails = currentWhine = 0;
+		currentBeers = currentShots = currentCocktails = currentWine = 0;
 	}
 	
 	public void setWeight(int passedWeight)
@@ -71,7 +70,7 @@ public class Participant
 	
 	public int getTotalDrinks()
 	{
-		return (currentBeers + currentShots + currentCocktails + currentWhine);
+		return (currentBeers + currentShots + currentCocktails + currentWine);
 	}
 	
 	public int getHoursDrinking()
@@ -89,14 +88,14 @@ public class Participant
 		currentBeers = numberOfBeers;
 	}
 	
-	public int getCurrentWhine()
+	public int getCurrentWine()
 	{
-		return currentWhine;
+		return currentWine;
 	}
 	
-	public void setCurrentWhine(int numberOfWhines)
+	public void setCurrentWine(int numberOfWines)
 	{
-		currentWhine = numberOfWhines;
+		currentWine = numberOfWines;
 	}
 	
 	public int getCurrentShots()

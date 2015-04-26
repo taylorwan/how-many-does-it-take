@@ -36,16 +36,16 @@ public class HealthCalculator
 	}
 	
 	//Returns 
-	public static double caluclateCalories(Participant thisParticipant)
+	public static int caluclateCalories(Participant thisParticipant)
 	{
 		
 		int currentBeer = thisParticipant.getCurrentBeers();
-		int currentWhine = thisParticipant.getCurrentWhine();
+		int currentWhine = thisParticipant.getCurrentWine();
 		int currentShots = thisParticipant.getCurrentShots();
 		int currentCocktails = thisParticipant.getCurrentCocktails();
 		
-		return (currentBeer * BEER_CALORIES + currentWhine * WHINE_CALORIES + currentShots * 
-				SHOT_CALORIES + currentCocktails * COCKTAIL_CALORIES);
+		return ( (currentBeer * BEER_CALORIES) + (currentWhine * WHINE_CALORIES) + 
+				 (currentShots * SHOT_CALORIES) + (currentCocktails * COCKTAIL_CALORIES) );
 	}
 	
 }
