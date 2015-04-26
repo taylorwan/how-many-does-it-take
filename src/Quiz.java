@@ -16,7 +16,7 @@ public class Quiz
 	}
 	
 	
-	
+
 	
 	
 	
@@ -72,17 +72,17 @@ public class Quiz
 		answerChoices.clear();
 		
 		//Question 4
-		prompt = "What should you do at your current BAC level of " + thisParticipant.getBAC();
+		prompt = "What should you do at your current BAC level of " + thisParticipant.getCurrentBAC();
 		answerChoices.add("Pace drinking and remember to drink water");
 		answerChoices.add("Stop drinking alcohol and start drinking water");
 		answerChoices.add("Leave the party and consume water");
 		answerChoices.add("Seek medical attention immediately");
 		
-		if (thisParticipant.getBAC() < .08)
+		if (thisParticipant.getCurrentBAC() < .08)
 			correct = "Pace drinking and remember to drink water";
-		else if (thisParticipant.getBAC() < .12)
+		else if (thisParticipant.getCurrentBAC() < .12)
 			correct = "Stop drinking alcohol and start drinking water";
-		else if (thisParticipant.getBAC() < .16)
+		else if (thisParticipant.getCurrentBAC() < .16)
 			correct = "Leave the party and consume a lot of water";
 		else
 			correct = "Seek medical attention immediately";
@@ -114,7 +114,7 @@ public class Quiz
 		answerChoices.add("5");
 		answerChoices.add("7");
 		answerChoices.add("8");
-		if (thisParticipant.getGender() = "Male")
+		if (thisParticipant.getGender() == Participant.GENDER.MALE)
 			correct = "5";
 		else
 			correct = "4";

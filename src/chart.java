@@ -27,7 +27,7 @@ public class chart
 	
 	public chart(Participant participant)
 	{
-		this.participant = particpant;
+		this.participant = participant;
 		
 		calculateLineLengths();
 		calculateCoordinates();
@@ -45,17 +45,17 @@ public class chart
 	
 	public void calculateLineLengths()
 	{
-		lineLengths[0] = participant.getBeerCount() * BRAIN_BEER + participant.getWineCount() * BRAIN_WINE+
-						+participant.getShotCount() * BRAIN_SHOT + participant.getCocktailCount() * BRAIN_COCKTAIL;
+		lineLengths[0] = participant.getCurrentBeers() * BRAIN_BEER + participant.getCurrentWine() * BRAIN_WINE+
+						+participant.getCurrentShots() * BRAIN_SHOT + participant.getCurrentCocktails() * BRAIN_COCKTAIL;
 		
-		lineLengths[1] = participant.getBeerCount() * HEART_BEER + participant.getWineCount() * HEART_WINE+
-						+participant.getShotCount() * HEART_SHOT + participant.getCocktailCount() * HEART_COCKTAIL;
+		lineLengths[1] = participant.getCurrentBeers() * HEART_BEER + participant.getCurrentWine() * HEART_WINE+
+						+participant.getCurrentShots() * HEART_SHOT + participant.getCurrentCocktails() * HEART_COCKTAIL;
 		
-		lineLengths[2] = participant.getBeerCount() * LIVER_BEER + participant.getWineCount() * LIVER_WINE+
-						+participant.getShotCount() * LIVER_SHOT + participant.getCocktailCount() * LIVER_COCKTAIL;
+		lineLengths[2] = participant.getCurrentBeers() * LIVER_BEER + participant.getCurrentWine() * LIVER_WINE+
+						+participant.getCurrentShots() * LIVER_SHOT + participant.getCurrentCocktails() * LIVER_COCKTAIL;
 		
-		lineLengths[3] = participant.getBeerCount() * KIDNEY_BEER + participant.getWineCount() * KIDNEY_WINE+
-						+participant.getShotCount() * KIDNEY_SHOT + participant.getCocktailCount() * KIDNEY_COCKTAIL;
+		lineLengths[3] = participant.getCurrentBeers() * KIDNEY_BEER + participant.getCurrentWine() * KIDNEY_WINE+
+						+participant.getCurrentShots() * KIDNEY_SHOT + participant.getCurrentCocktails() * KIDNEY_COCKTAIL;
 	}
 	
 	public void paint(Graphics2D myGraphic) 

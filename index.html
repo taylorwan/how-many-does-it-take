@@ -5,8 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=0.8">
 	<!-- <link rel="icon" type="image/ico" href="img/icon.png"/> -->
 	<link rel="stylesheet" href="css/style.css">
-	<!-- <script src="http://www.java.com/js/deployJava.js"></script>  -->
-	<script src="js/deployJava.js"></script>
+	<!-- <script src="http://www.java.com/js/deployJava.js"></script>
+	
 	<script>
 		console.log("script running");
 	    var attributes = {codebase: '/Users/taylor/Dropbox/2Spring2015/AdvancedProgramming/Projects/t',
@@ -19,9 +19,27 @@
 	    console.log("deploying");
 	    deployJava.runApplet(attributes, parameters, version);
 	    console.log("deployed");
-	</script>
+	</script>  -->
 
 </head>
 
 <body>
+
+	<object id="testapplet-object" 
+        classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
+        width="800" height="600"
+        codebase="http://java.sun.com/update/1.6.0/jinstall-6u30-windows-i586.cab#Version=1,6,0,0">
+		<param name="archive" value="t.jar" />
+		<param name="code" value="Driver.class" />
+		<param name="myParam" value="data.txt 3 2 0" />
+		<embed id="testapplet-embed"
+			type="/Users/taylor/Dropbox/2Spring2015/AdvancedProgramming/Projects/t;version=1.6"
+			width="256" height="256"
+			archive="t.jar"
+			code="Driver.class" 
+			pluginspage="http://java.com/download/"
+			myParam="data.txt 3 2 0" />
+		</embed>
+	</object>
+
 </body>
