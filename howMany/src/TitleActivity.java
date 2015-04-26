@@ -107,13 +107,14 @@ public class TitleActivity extends JPanel implements ActionListener
 		//This container will hold the title layout
 		container = application.getContentPane();
 		container.setLayout(new BorderLayout());
+		application.setLayout(new BorderLayout());
 		
 		
 		//Drop down menu
 		String hourOptions[] = {"1","2","3","4","5","6","7","8","9"};
 		hoursMenu = new JComboBox<String>(hourOptions);
 		
-		application.getContentPane().add(this);
+		//application.getContentPane().add(this);
 		
 		//Create the GUI
 		initGUI();
@@ -123,7 +124,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	{
 		container.setLayout(new BorderLayout());
 		application.getContentPane().add(this);
-		
+		container = application.getContentPane();
 		
 		genderButtons.add(maleButton);
 		genderButtons.add(femaleButton);
@@ -136,7 +137,6 @@ public class TitleActivity extends JPanel implements ActionListener
 		nameInputBox.setSize(d);
 		weightInputBox.setSize(d);
 		startButton.setSize(d);
-		Color color = new Color(0,0,0,0);
 		form.add(nameInputBox);
 		form.add(weightLabel);
 		form.add(weightInputBox);
@@ -149,7 +149,7 @@ public class TitleActivity extends JPanel implements ActionListener
 		switchActivities.add(startButton);
 		
 		container.add(form, BorderLayout.SOUTH);
-		container.add(switchActivities, BorderLayout.CENTER);
+		container.add(switchActivities, BorderLayout.NORTH);
 	}
 	
 	public void begin() throws InterruptedException 
@@ -161,8 +161,9 @@ public class TitleActivity extends JPanel implements ActionListener
 	@Override
 	protected void paintComponent(Graphics thisGraphic)
 	{
+		
 		super.paintComponent(thisGraphic);
-		//thisGraphic.drawImage(backgroundImage, -187, 0, this);
+		thisGraphic.drawImage(backgroundImage, 0, 0, this);
 	}
 	
 	private boolean weightIsGood()
@@ -222,7 +223,8 @@ public class TitleActivity extends JPanel implements ActionListener
             	//Deactivate current activity
         		container.setVisible(false);
         		container.removeAll();
-            	
+        		application.getContentPane().removeAll();
+        		
             	//Activate main activity
             	mainActivity.activate();
         	}

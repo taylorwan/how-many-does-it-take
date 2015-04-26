@@ -17,7 +17,6 @@ public class Application extends JFrame
 	private MainActivity mainActivity;
 	
 	final String titleActivityFilePath = "/Users/danielanderson/Desktop/start_screen2.png";
-	final String mainActivityFilePath = "";
 	
 	//Screen dimension constants
 	final static int screenWidth = 800;
@@ -39,6 +38,7 @@ public class Application extends JFrame
 		mainActivity = new MainActivity(this);
 		titleActivity = new TitleActivity(titleActivityFilePath, this, mainActivity);
 		currentActivity = CURRENT_ACTIVITY.TITLE;
+		//setContentPane(titleActivity);
 	}
 	
 	//Creates all the GUI components
@@ -46,7 +46,7 @@ public class Application extends JFrame
 	{
 		
 		//Init GUI components of the JFrame
-		setLocation(100,100);
+		setLocation(0,0);
 		Color color = new Color(0,0,0,0);
 		setForeground(color);
 		setSize(screenWidth, screenHeight);
@@ -58,6 +58,15 @@ public class Application extends JFrame
 	//Main processing function
 	public static void main(String[] args) 
 	{
+		
+		Color gray = Color.gray;
+		int pix = gray.getRGB();
+		int r = (pix >> 16) & 0xFF;
+		int g = (pix >> 8) & 0xFF;
+		int b = pix & 0xFF;
+		System.out.println(r);
+		System.out.println(g);
+		System.out.println(b);
 		
 		//Try application
 		try
@@ -98,7 +107,6 @@ public class Application extends JFrame
 						titleActivity.begin();
 						break;
 					case MAIN:
-						
 						mainActivity.begin();
 						break;
 				}
