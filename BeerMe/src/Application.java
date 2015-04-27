@@ -131,10 +131,13 @@ public class Application extends Applet
 		{
 			case TITLE:
 				titleActivity.activate();
+				break;
 			case MAIN:
 				mainActivity.activate();
+				break;
 			case QUIZ:
 				quizActivity.activate();
+				break;
 		}
 	}
 	

@@ -34,8 +34,13 @@ public class QuizActivity extends JPanel implements ActionListener
 	private Image bodyFigure;
 	private Image bodyPegs;
 	
-	//JLabel for questions
+	//Panel for holding participant info
+	private JPanel participantInfo;
 	private JPanel sidebarHolder;
+	private JLabel bacLabel;
+	private JLabel caloriesLabel;
+	
+	//JLabel for questions
 	private int currentQuestion;
 	private JLabel questionLabel;
 	private JLabel answerA;
@@ -64,6 +69,9 @@ public class QuizActivity extends JPanel implements ActionListener
 	private final static String maleBodyFilepath = "../img/body_fill.png";
 	private final static String femaleBodyFilepath = "../img/female-w-trans.png";
 	private final static String bodyPegsFilepath = "../img/body_pegs.png";
+
+	//Participant
+	private Participant participant;
 	
 	//Quiz questions
 	private Quiz quiz;
@@ -79,9 +87,6 @@ public class QuizActivity extends JPanel implements ActionListener
 
 		//counter
 		currentQuestion = 0;
-
-		//quiz
-		quiz = new Quiz();
 		
 		//Create image of the male body
 		bodyFigure = Toolkit.getDefaultToolkit().getImage(maleBodyFilepath);
@@ -94,16 +99,13 @@ public class QuizActivity extends JPanel implements ActionListener
 	private void create() throws IOException
 	{
 		System.out.println("QuizActivity::create()");
-
-		container = application.getMainFrame().getContentPane();
-
 		//Create the general accessor menu
 		System.out.println("QuizActivity::create()::quizLayout");
 		FlowLayout quizLayout = new FlowLayout();
 		// quizLayout.setHgap(5);
 		
 		System.out.println("QuizActivity::create()::sidebar");
-		// sidebar = new JPanel[6];
+		sidebar = new JPanel[6];
 		
 		//Participant information with Flow Layout
 		System.out.println("QuizActivity::create()::infoLayout");
@@ -117,77 +119,53 @@ public class QuizActivity extends JPanel implements ActionListener
 		sidebarHolder = new JPanel();
 		sidebarHolder.setLayout(new BoxLayout(sidebarHolder, BoxLayout.Y_AXIS));
 		
+		//Create the labels, which later will be dynamic
+		System.out.println("QuizActivity::create()::bacLabel, caloriesLabel");
+		bacLabel = new JLabel(bacLabelString);
+		caloriesLabel = new JLabel(caloriesLabelString);
+		
 		
 		// ----- END Alcohol Labels ----- //
 		
 		// -- Create buttons -> For INSERTS -- //
 		System.out.println("QuizActivity::create()::questionLabel");
 		questionLabel = new JLabel("Question");
-		
+		// sidebar[0].add(questionLabel);
+
 		System.out.println("QuizActivity::create()::answers A-D");
 		answerA = new JLabel("Answer A");
+		// sidebar[1].add(questionLabel);
 		answerB = new JLabel("Answer B");
+		// sidebar[2].add(questionLabel);
 		answerC = new JLabel("Answer C");
+		// sidebar[3].add(questionLabel);
 		answerD = new JLabel("Answer D");
+		// sidebar[4].add(questionLabel);
 
 		System.out.println("QuizActivity::create()::next button");
 		submitAnswer = new JButton("Next");
 		submitAnswer.addActionListener(this);
+		// sidebar[5].add(questionLabel);
 		
-		//Navigation Buttons
+		//Navigation Button
 		System.out.println("QuizActivity::create()::return");
 		returnButton = new JButton("Return");
 		returnButton.addActionListener(this);
+		// navigation.add(returnButton);
 
 		System.out.println("QuizActivity::create()::health report");
 		healthReportButton = new JButton("Health Report");
+		// navigation.add(healthReportButton);
+
 
 	}
 
-	
-	//Create the GUI
-	private void initGUI()
-	{		
-		System.out.println("QuizActivity::initGUI()");
-
-		sidebarHolder.add(questionLabel);
-		sidebarHolder.add(answerA);
-		sidebarHolder.add(answerB);
-		sidebarHolder.add(answerC);
-		sidebarHolder.add(answerD);
-		sidebarHolder.add(submitAnswer);
-		sidebarHolder.setAlignmentY(Component.LEFT_ALIGNMENT);
-
-		//Add all flow menus to side panel box layout
-		// for(int i = 0; i < sidebar.length; i++)
-		// {
-		// 	sidebar[i].setAlignmentY(Component.LEFT_ALIGNMENT);
-		// 	sidebarHolder.add(sidebar[i]);
-		// }
-
-		//Add buttons to navigation
-		navigation.add(returnButton);
-		navigation.add(healthReportButton);
-		navigation.setBackground(Color.LIGHT_GRAY);
-
-		sidebarHolder.add(navigation);
-
-		//Work with container
-		container.setLayout(new BorderLayout());
-		container.add(sidebarHolder, BorderLayout.EAST);
-
-		showQuestion();
-
-	}
-	
 	public void showQuestion() {
 		System.out.println("QuizActivity::showQuestion()");
-		System.out.println(currentQuestion == quiz.size());
-		
 		if ( currentQuestion == quiz.size() ) {
 		
-			System.out.println( "done:" + quiz.DONE );
-			questionLabel.setText( quiz.DONE + quiz.getCorrect() + "/" + quiz.size() );
+			System.out.println( quiz.DONE );
+			questionLabel.setText( quiz.DONE );
 
 			answerA.setText("");
 			answerB.setText("");
@@ -213,7 +191,57 @@ public class QuizActivity extends JPanel implements ActionListener
 		}
 		repaint();
 	}
+	
+	//Create the GUI
+	private void initGUI()
+	{		
+		System.out.println("QuizActivity::initGUI()");
+		//Change image accordingly -> male diagram
+		if(participant.getGender() == Participant.GENDER.MALE)
+		{		
+			bodyFigure = Toolkit.getDefaultToolkit().getImage(maleBodyFilepath);
+		}
+		
+		//Female diagram
+		else if(participant.getGender() == Participant.GENDER.FEMALE)
+		{
+			bodyFigure = Toolkit.getDefaultToolkit().getImage(femaleBodyFilepath);
+		}
+		
+		container = application.getMainFrame().getContentPane();
+		
+		//Add labels for participant
+		updateBACText(""+participant.getCurrentBAC());
+		participantInfo.add(bacLabel);
+		updateCaloriesText(participant.getCurrentCalories());
+		participantInfo.add(caloriesLabel);
+		participantInfo.setBackground(Color.gray);
+		
+		//Add buttons to navigation
+		navigation.add(returnButton);
+		navigation.add(healthReportButton);
+		navigation.setBackground(Color.LIGHT_GRAY);
+		
+		//Add to the top of the east panel
+		sidebarHolder.add(participantInfo);
+		
+		//Add all flow menus to side panel box layout
+		for(int i = 0; i < sidebar.length; i++)
+		{
+			sidebar[0].setAlignmentY(Component.LEFT_ALIGNMENT);
+			sidebarHolder.add(sidebar[i]);
+		}
+		
+		sidebarHolder.add(navigation);
+		
+		//Work with container
+		container.setLayout(new BorderLayout());
+		container.add(sidebarHolder, BorderLayout.EAST);
 
+		showQuestion();
+
+	}
+	
 	@Override
 	protected void paintComponent(Graphics thisGraphic)
 	{
@@ -230,7 +258,7 @@ public class QuizActivity extends JPanel implements ActionListener
 		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
 		
 		//Updates the fill for the background color
-		// updateBodyFill(rectGraphic);
+		updateBodyFill(rectGraphic);
 		
 		//Draw image layer two
 		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
@@ -241,6 +269,71 @@ public class QuizActivity extends JPanel implements ActionListener
 		thisGraphic.drawImage(bodyPegs, bodyPositionX-150, bodyPositionY-5, this);
 	}
 	
+	private int getBACState()
+	{
+		// System.out.println("QuizActivity::getBACState()");
+		//Decide fill color based on heights, etc
+		if(participant.getCurrentBAC() < drivingLimit)
+		{
+			return 1;
+		}
+		else if(participant.getCurrentBAC() >= drivingLimit && participant.getCurrentBAC() < limitTwo)
+		{
+			return 2;
+		}
+		else if(participant.getCurrentBAC() >= limitTwo && participant.getCurrentBAC() < limitThree)
+		{
+			return 3;
+		}
+		else if(participant.getCurrentBAC() >= limitThree)
+		{
+			return 4;
+		}
+		
+		return -1;
+	}
+	
+	private void updateBodyFill(Graphics2D rectGraphic)
+	{
+		System.out.println("QuizActivity::updateBodyFill()");
+		//Calculate the max height
+		final double maxHeight = (double) bodyFigure.getHeight(this);
+		
+		//Calculate height of fill rect
+		int bodyFillHeight = (int)((participant.getCurrentBAC() / maxBAC ) * maxHeight);
+		
+		//Decide fill color based on heights, etc
+		if(getBACState() == 1)
+		{
+			rectGraphic.setColor(Color.green);
+		}
+		else if(getBACState() == 2)
+		{
+			rectGraphic.setColor(Color.yellow);
+		}
+		else if(getBACState() == 3)
+		{
+			rectGraphic.setColor(Color.orange);
+		}
+		else if(getBACState() == 4)
+		{
+			rectGraphic.setColor(Color.red);
+		}
+		
+		//Draw rect using simple percentage-height formulation
+		if(participant.getCurrentBAC() <= maxBAC)
+		{
+			//Fill dynamic rect based on current height needed
+			rectGraphic.fillRect(bodyPositionX, (int) (bodyPositionY + maxHeight - bodyFillHeight), 
+								 bodyFigure.getWidth(this), bodyFillHeight);
+		}
+		
+		//We don't want to draw passed the bounds, this sets our threshold at the max
+		else
+		{
+			rectGraphic.fillRect(bodyPositionX, bodyPositionY, bodyFigure.getWidth(this), bodyFigure.getHeight(this));
+		}
+	}
 	
 	//Makes panel visible and sets applications
 	//current activity
@@ -272,6 +365,14 @@ public class QuizActivity extends JPanel implements ActionListener
 		Thread.sleep(10);
 	}
 	
+	//Set the participant
+	public void setParticipant(Participant passedParticipant)
+	{
+		System.out.println("QuizActivity::setParticipant()");
+		participant = passedParticipant;
+		bacLabel.setText(bacLabelString + participant.getCurrentBAC());
+		caloriesLabel.setText(caloriesLabelString + participant.getCurrentCalories());
+	}
 	
 	//Implemented Action Listener Function
 	public void actionPerformed(ActionEvent evt) 
@@ -309,6 +410,22 @@ public class QuizActivity extends JPanel implements ActionListener
         	deactivate();
         	application.setCurrentActivity(Application.CURRENT_ACTIVITY.HEALTH_REPORT);
         }
+	}
+
+	private void updateBACText(String participantBAC)
+	{
+		// System.out.println("QuizActivity::updateBACText()");
+		String result = bacLabelString + participantBAC + fontHtmlCloser;
+		bacLabel.setText(String.format(result, "white"));
+		
+	}
+	
+	private void updateCaloriesText(int participantCalories)
+	{
+		// System.out.println("QuizActivity::updateCaloriesText()");
+		String result = caloriesLabelString + participantCalories + fontHtmlCloser;
+		caloriesLabel.setText(String.format(result, "white"));
+		
 	}
 	
 

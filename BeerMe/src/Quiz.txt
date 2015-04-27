@@ -4,21 +4,23 @@ import java.util.ArrayList;
 public class Quiz {
 
 	private ArrayList<Question> questions = new ArrayList<>();
+	private Participant thisParticipant;
 	private int numQuestions, numCorrect;
 
-	final static String DONE = "Congrats! You're done. You got a: ";
+	final static String DONE = "Congrats! You're done.";
 	
-	public Quiz()
+	public Quiz( Participant guy )
 	{
 		createQuestions();
 		numQuestions = questions.size();
 		numCorrect = 0;
+		thisParticipant = guy;
 	}
 
 	public int size() {
 		return numQuestions;
 	}
-	public int getCorrect() {
+	public int getNumCorrect() {
 		return numCorrect;
 	}
 	public Question get( int i ) {
@@ -75,6 +77,31 @@ public class Quiz {
 		questions.add(question);
 		answerChoices.clear();
 		
+		//Question 4
+
+		double curBAC = thisParticipant.getCurrentBAC();
+		prompt = "What should you do at your current BAC level of " + curBAC;
+		answerChoices.add("Pace drinking and remember to drink water");
+		answerChoices.add("Stop drinking alcohol and start drinking water");
+		answerChoices.add("Leave the party and consume water");
+		answerChoices.add("Seek medical attention immediately");
+		
+		if ( curBAC < .08)
+			correct = "Pace drinking and remember to drink water";
+		else if ( curBAC < .12)
+			correct = "Stop drinking alcohol and start drinking water";
+		else if ( curBAC < .16)
+			correct = "Leave the party and consume a lot of water";
+		else
+			correct = "Seek medical attention immediately";
+		
+		rationale = "As BAC rises to around .10, you should refrain from drinking. "
+					+"\n At a BAC level of .16, medical attention should be administered.";
+		
+		question = new Question(prompt, answerChoices, correct, rationale);
+		questions.add(question);
+		answerChoices.clear();
+		
 		//Question 5
 		prompt = "Which organs are severely affected by alcohol consumption?";
 		answerChoices.add("Kidney");
@@ -89,6 +116,23 @@ public class Quiz {
 		questions.add(question);
 		answerChoices.clear();
 		
+		//Question 6
+		prompt = "How many drinks within a 2 hour period is considered binge drinking?";
+		answerChoices.add("4");
+		answerChoices.add("5");
+		answerChoices.add("7");
+		answerChoices.add("8");
+		if (thisParticipant.getGender() == Participant.GENDER.MALE)
+			correct = "5";
+		else
+			correct = "4";
+		
+		rationale = "Five drinks for men and four drinks for women is considered binge drinking /n by the "
+					+ "National Institure on Alcohol Abuse and Alcoholism";
+				
+		question = new Question(prompt, answerChoices, correct, rationale);
+		questions.add(question);
+		answerChoices.clear();
 		
 		//Question 7
 		prompt = "The amount of excess calories associated with a night of drinking can total: ";

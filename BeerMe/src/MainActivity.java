@@ -520,7 +520,7 @@ public class MainActivity extends JPanel implements ActionListener
         }
         else if(command.equals("Quiz"))	//--> Navigates to QuizActivity
         {
-        	quizActivity.setParticipant(participant);
+        	// quizActivity.setParticipant(participant);
         	deactivate();
         	application.setCurrentActivity(Application.CURRENT_ACTIVITY.QUIZ);
         }
