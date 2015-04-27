@@ -57,7 +57,7 @@ a:hover {
 /* background */
 
 html, body {
-    background: url(../img/bg-dark.jpg);
+    background: url(../img/bg.jpg);
     background-size: cover;
     color: #fff;
 }
@@ -165,7 +165,6 @@ html, body {
     max-width: 200px;
     max-height: 200px;
     overflow:hidden;
-    background: #000;
     border-radius: 10px;
     border: #fff 1px dashed;
     width: 90%;

@@ -2,8 +2,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 
-public class chart 
-{
+public class Chart {
+
 	//Rate constants per drink	
 	private final double BRAIN_BEER = 6.0, BRAIN_WINE = 3.0, BRAIN_SHOT = 7.6, BRAIN_COCKTAIL = 6.8;
 	private final double HEART_BEER = 7.0, HEART_WINE = 6.0, HEART_SHOT = 8.0, HEART_COCKTAIL = 7.0;
@@ -63,4 +63,5 @@ public class chart
 		myGraphic.setColor(Color.CYAN);
 		myGraphic.drawPolygon(xPoints, yPoints, 4);
 	}
+
 }
