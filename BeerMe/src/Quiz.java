@@ -1,27 +1,29 @@
 import java.util.ArrayList;
 
 
-public class Quiz 
-{
+public class Quiz {
 
-	ArrayList<Question> questions = new ArrayList<>();
-	Participant thisParticipant;
-	int numQuestions, numCorrect;
+	private ArrayList<Question> questions = new ArrayList<>();
+	private int numQuestions, numCorrect;
 	
-	public Quiz(Participant person)
+	public Quiz()
 	{
 		createQuestions();
 		numQuestions = questions.size();
 		numCorrect = 0;
 	}
-	
-	
 
-	
-	
-	
-	
-	
+	public getNumQs() {
+		return numQuestions;
+	}
+	public getNumCorrect() {
+		return numCorrect;
+	}
+	public getQuestion( int i ) {
+		return questions.get(i);
+	}
+
+
 	public void createQuestions()
 	{
 		String prompt, correct, rationale;

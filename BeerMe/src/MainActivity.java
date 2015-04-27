@@ -319,6 +319,7 @@ public class MainActivity extends JPanel implements ActionListener
 		//Draw image layer one
 		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
 		
+		//Updates the fill for the background color
 		updateBodyFill(rectGraphic);
 		
 		//Draw image layer two
@@ -465,8 +466,7 @@ public class MainActivity extends JPanel implements ActionListener
         {
         	removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.SHOT);
         }
-        
-        //If user chooses to add or remove a cocktail
+        //If user chooses to add or remove a shot
         if (command.equals("+COCKTAIL"))
         {
         	addAlcohol(AlcoholFactory.ALCOHOL_TYPE.COCKTAIL);
@@ -476,22 +476,29 @@ public class MainActivity extends JPanel implements ActionListener
         	removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.COCKTAIL);
         }
         
-        //Navigation
-        //Navigation
-        if(command.equals("Return"))
-        {
-        	
-        	deactivate();
-        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.TITLE);
-        }
-        if(command.equals("Health Report"))
-        {
-        	
-        	deactivate();
-        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.TITLE);
-        }
+        //Handles navigation between activities if necessary
+        handleNavigation(evt, command);
+       
 
      } // end actionPerformed()
+	
+	//Handles navigation between activities
+	private void handleNavigation(ActionEvent evt, String command)
+	{
+        //----- Navigation ----- //
+        if(command.equals("Return"))	//--> Returns to MainActivity
+        {
+        	
+        	deactivate();
+        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.TITLE);
+        }
+        else if(command.equals("Health Report"))	//--> Navigates to HealthReportActivity
+        {
+        	
+        	deactivate();
+        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.HEALTH_REPORT);
+        }
+	}
 	
 	private void addAlcohol(AlcoholFactory.ALCOHOL_TYPE whichAlcohol)
 	{

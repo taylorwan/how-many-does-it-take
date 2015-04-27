@@ -104,6 +104,9 @@ public class Application extends Applet
 					case MAIN:
 						mainActivity.begin();
 						break;
+					case QUIZ:
+						mainActivity.begin();
+						break;
 				}
 				
 			}
@@ -122,10 +125,12 @@ public class Application extends Applet
 		
 		switch(currentActivity)
 		{
-		case TITLE:
-			titleActivity.activate();
-		case MAIN:
-			mainActivity.activate();
+			case TITLE:
+				titleActivity.activate();
+			case MAIN:
+				mainActivity.activate();
+			case QUIZ:
+				mainActivity.activate();
 		}
 	}
 	
