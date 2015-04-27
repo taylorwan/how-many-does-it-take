@@ -159,7 +159,7 @@ public class MainActivity extends JPanel implements ActionListener
 		// ----- Alcohol labels ----- //
 		
 		//BEER LABEL//
-		beerIcon = new ImageIcon("/Users/danielanderson/Desktop/beer_icon.png");
+		beerIcon = new ImageIcon("../img/brown-beer.png");
 		beerLabel = new JLabel(beerIcon);
 		
 		//Create hover over
@@ -171,7 +171,7 @@ public class MainActivity extends JPanel implements ActionListener
 		alcoholAccessorMenu[0].add(beerLabel);
 		
 		//WINE LABEL//
-		wineIcon = new ImageIcon("/Users/danielanderson/Desktop/wine_icon.png");
+		wineIcon = new ImageIcon("../img/wine.png");
 		wineLabel = new JLabel(wineIcon);
 		
 		//Create hover over
@@ -184,7 +184,7 @@ public class MainActivity extends JPanel implements ActionListener
 		
 		
 		//SHOT LABEL//
-		shotIcon = new ImageIcon("/Users/danielanderson/Desktop/shot_icon.png");
+		shotIcon = new ImageIcon("../img/brown-shot.png");
 		shotLabel = new JLabel(shotIcon);
 		
 		//Create hover over
@@ -196,7 +196,7 @@ public class MainActivity extends JPanel implements ActionListener
 		alcoholAccessorMenu[2].add(shotLabel);
 		
 		//COCKTAIL LABEL//
-		cocktailIcon = new ImageIcon("/Users/danielanderson/Desktop/cocktail_icon.png");
+		cocktailIcon = new ImageIcon("../img/cocktail.png");
 		cocktailLabel = new JLabel(cocktailIcon);
 		
 		//Create hover over
