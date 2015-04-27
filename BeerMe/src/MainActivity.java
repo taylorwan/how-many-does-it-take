@@ -168,7 +168,7 @@ public class MainActivity extends JPanel implements ActionListener
 		
 		// ----- Alcohol labels ----- //
 		//BEER LABEL//
-		beerIcon = new ImageIcon("/Users/danielanderson/Desktop/beer_icon.png");
+		beerIcon = new ImageIcon("../img/brown-beer.png");
 		beerLabel = new JLabel(beerIcon);
 		
 		//Create hover over
