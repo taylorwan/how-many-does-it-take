@@ -25,7 +25,7 @@ public class Chart {
 	
 	Participant participant;
 	
-	public chart(Participant participant)
+	public Chart(Participant participant)
 	{
 		this.participant = participant;
 		

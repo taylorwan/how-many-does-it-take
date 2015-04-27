@@ -16,7 +16,7 @@ public class Application extends JFrame
 	private TitleActivity titleActivity;
 	private MainActivity mainActivity;
 	
-	final String titleActivityFilePath = "/Users/danielanderson/Desktop/start_screen2.png";
+	final String titleActivityFilePath = "../img/intro.jpg";
 	
 	//Screen dimension constants
 	final static int screenWidth = 800;
