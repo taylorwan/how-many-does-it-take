@@ -1,5 +1,5 @@
 # Beer Me
-# Alcohol Awareness
+Alcohol Awareness
 
 A java applet for keeping track of Blood Alcohol Concentration 
 
