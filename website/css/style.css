@@ -29,6 +29,9 @@ a:hover {
     -o-transition: all .15s linear;
     transition: all .15s linear;
 }
+img {
+    max-width: 100%;
+}
 
 .wrap {
     margin: 0 40px;
@@ -217,4 +220,58 @@ html {
     border: 2px #fff solid;
     border-radius: 10px;
     padding: 2em;
+    font-size: 1.2em;
+}
+.software .uml-holder {
+    margin: 2em 4em 4em;
+}
+.software .uml-holder:hover {
+    cursor: pointer;
+}
+
+/* uml lightbox */
+
+#bigUML {
+    position: fixed;
+    top: 20px;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(45, 45, 45, 0.95);
+    box-shadow: #000 0 0 1000px;
+    padding: 2em;
+    text-align: center;
+    opacity: 1;
+
+    -webkit-transition: all .25s linear;
+    -moz-transition: all .25s linear;
+    -ms-transition: all .25s linear;
+    -o-transition: all .25s linear;
+    transition: all .25s linear;
+}
+#bigUML .wrap {
+    overflow-y: scroll;
+    max-height: 100%;
+}
+#bigUML.hide {
+    top: -100%;
+    opacity: 0;
+    background: rgba(45, 45, 45, 0);
+    pointer-events: none;
+}
+#closeUML {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 65px;
+    height: 65px;
+    overflow: hidden;
+}
+#closeUML:hover {
+    cursor: pointer;
+}
+#closeUML:before {
+    content:'\2716';
+    padding: 0 0.3em;
+    font-size: 3em;
 }
