@@ -1,3 +1,4 @@
+import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -6,7 +7,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 
 
-public class Application
+public class Application extends Applet
 {
 	//Keeping track of activities
 	public enum CURRENT_ACTIVITY {TITLE, MAIN};

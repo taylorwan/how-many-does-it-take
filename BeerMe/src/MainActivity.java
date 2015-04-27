@@ -78,9 +78,9 @@ public class MainActivity extends JPanel implements ActionListener
 	private final static String bacLabelString = "<html><font color = '%s'> MY BAC: ";
 	private final static String caloriesLabelString = "<html><font color = '%s'> MY CALORIES: ";
 	private final static String fontHtmlCloser = "</font></html>";
-	private final static String maleBodyFilepath = "/Users/danielanderson/Desktop/body_fill.png";
-	private final static String femaleBodyFilepath = "/Users/danielanderson/Desktop/female-w-trans.png";
-	private final static String bodyPegsFilepath = "/Users/danielanderson/Desktop/body_pegs.png";
+	private final static String maleBodyFilepath = "../img/body_fill.png";
+	private final static String femaleBodyFilepath = "../img/female-w-trans.png";
+	private final static String bodyPegsFilepath = "../img/body_pegs.png";
 	
 	//Consumption Quantity Character
 	private final static String consumptionQuantityChar = "x";
@@ -159,7 +159,7 @@ public class MainActivity extends JPanel implements ActionListener
 		// ----- Alcohol labels ----- //
 		
 		//BEER LABEL//
-		beerIcon = new ImageIcon("../img/brown-beer.png");
+		beerIcon = new ImageIcon("../img/beer_icon.png");
 		beerLabel = new JLabel(beerIcon);
 		
 		//Create hover over
@@ -171,7 +171,7 @@ public class MainActivity extends JPanel implements ActionListener
 		alcoholAccessorMenu[0].add(beerLabel);
 		
 		//WINE LABEL//
-		wineIcon = new ImageIcon("../img/wine.png");
+		wineIcon = new ImageIcon("../img/wine_icon.png");
 		wineLabel = new JLabel(wineIcon);
 		
 		//Create hover over
@@ -184,7 +184,7 @@ public class MainActivity extends JPanel implements ActionListener
 		
 		
 		//SHOT LABEL//
-		shotIcon = new ImageIcon("../img/brown-shot.png");
+		shotIcon = new ImageIcon("../img/shot_icon.png");
 		shotLabel = new JLabel(shotIcon);
 		
 		//Create hover over
@@ -196,7 +196,7 @@ public class MainActivity extends JPanel implements ActionListener
 		alcoholAccessorMenu[2].add(shotLabel);
 		
 		//COCKTAIL LABEL//
-		cocktailIcon = new ImageIcon("../img/cocktail.png");
+		cocktailIcon = new ImageIcon("../img/cocktail_icon.png");
 		cocktailLabel = new JLabel(cocktailIcon);
 		
 		//Create hover over
