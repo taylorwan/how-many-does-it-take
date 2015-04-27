@@ -32,4 +32,11 @@ public class Question
 	public String getRationale() {
 		return rationale;
 	}
+	public String toString() {
+		String result = "";
+		for (int i = 0; i < size(); i++) {
+			result += getChoice(i);
+		}
+		return result;
+	}
 }

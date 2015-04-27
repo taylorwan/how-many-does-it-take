@@ -27,6 +27,7 @@ public class MainActivity extends JPanel implements ActionListener
 	//Main application for Activity Navigation
 	private Application application;
 	private QuizActivity quizActivity;
+	private HealthReport healthReport;
 	private JPanel alcoholAccessorMenu[];
 	private Container container;
 	
@@ -106,13 +107,14 @@ public class MainActivity extends JPanel implements ActionListener
 	private Participant participant;
 	
 	//Constructor
-	public MainActivity(Application passedApplication, QuizActivity passedQuizActivity) throws IOException
+	public MainActivity(Application passedApplication, QuizActivity passedQuizActivity, HealthReport passedHealthReport) throws IOException
 	{
 		System.out.println("MainActivity::MainActivity()");
 		//Set the application and use it to create 
 		//a custom container exclusive to MainActivity
 		application = passedApplication;
 		quizActivity = passedQuizActivity;
+		healthReport = passedHealthReport;
 		
 		//Create image of the male body
 		bodyFigure = Toolkit.getDefaultToolkit().getImage(maleBodyFilepath);
@@ -168,8 +170,8 @@ public class MainActivity extends JPanel implements ActionListener
 		beerLabel = new JLabel(beerIcon);
 		
 		//Create hover over
-		String thisHover = String.format(beerHoverOver, alcoholFactory.getCalories(AlcoholFactory.ALCOHOL_TYPE.BEER),
-				alcoholFactory.getOuncesPerDrink(AlcoholFactory.ALCOHOL_TYPE.BEER));
+		String thisHover = String.format(beerHoverOver, alcoholFactory.getCalories("Beer"),
+				alcoholFactory.getOuncesPerDrink("Beer"));
 		beerLabel.setToolTipText(thisHover);
 		
 		//Add label
@@ -180,8 +182,8 @@ public class MainActivity extends JPanel implements ActionListener
 		wineLabel = new JLabel(wineIcon);
 		
 		//Create hover over
-		thisHover = String.format(wineHoverOver,alcoholFactory.getCalories(AlcoholFactory.ALCOHOL_TYPE.WINE),
-								 alcoholFactory.getOuncesPerDrink(AlcoholFactory.ALCOHOL_TYPE.WINE));
+		thisHover = String.format(wineHoverOver,alcoholFactory.getCalories("Wine"),
+								 alcoholFactory.getOuncesPerDrink("Wine"));
 		wineLabel.setToolTipText(thisHover);
 		
 		//Add label
@@ -193,8 +195,8 @@ public class MainActivity extends JPanel implements ActionListener
 		shotLabel = new JLabel(shotIcon);
 		
 		//Create hover over
-		thisHover = String.format(shotHoverOver,alcoholFactory.getCalories(AlcoholFactory.ALCOHOL_TYPE.SHOT),
-				 alcoholFactory.getOuncesPerDrink(AlcoholFactory.ALCOHOL_TYPE.SHOT));
+		thisHover = String.format(shotHoverOver,alcoholFactory.getCalories("Shot"),
+				 alcoholFactory.getOuncesPerDrink("Shot"));
 		shotLabel.setToolTipText(thisHover);
 		
 		//Add label
@@ -205,8 +207,8 @@ public class MainActivity extends JPanel implements ActionListener
 		cocktailLabel = new JLabel(cocktailIcon);
 		
 		//Create hover over
-		thisHover = String.format(cocktailHoverOver,alcoholFactory.getCalories(AlcoholFactory.ALCOHOL_TYPE.COCKTAIL),
-				 alcoholFactory.getOuncesPerDrink(AlcoholFactory.ALCOHOL_TYPE.COCKTAIL));
+		thisHover = String.format(cocktailHoverOver,alcoholFactory.getCalories("Cocktail"),
+				 alcoholFactory.getOuncesPerDrink("Cocktail"));
 		cocktailLabel.setToolTipText(thisHover);
 		
 		//Add label
@@ -217,45 +219,57 @@ public class MainActivity extends JPanel implements ActionListener
 		// -- Create buttons -> For INSERTS -- //
 		addBeer = new JButton("+BEER");
 		addBeer.addActionListener(this);
+		styleButton( addBeer );
 		alcoholAccessorMenu[0].add(addBeer);
 		
 		addWine = new JButton("+WINE");
 		addWine.addActionListener(this);
+		styleButton( addWine );
 		alcoholAccessorMenu[1].add(addWine);
 		
 		addShot = new JButton("+SHOT");
 		addShot.addActionListener(this);
+		styleButton( addShot );
 		alcoholAccessorMenu[2].add(addShot);
 		
 		addCocktail = new JButton("+COCKTAIL");
 		addCocktail.addActionListener(this);
+		styleButton( addCocktail );
 		alcoholAccessorMenu[3].add(addCocktail);
 		
 		//Create buttons -> For REMOVALS
 		removeBeer = new JButton("-BEER");
 		removeBeer.addActionListener(this);
+		styleButton( removeBeer );
 		alcoholAccessorMenu[0].add(removeBeer);
 		
 		removeWine = new JButton("-WINE");
 		removeWine.addActionListener(this);
+		styleButton( removeWine );
 		alcoholAccessorMenu[1].add(removeWine);
 		
 		removeShot = new JButton("-SHOT");
 		removeShot.addActionListener(this);
+		styleButton( removeShot );
 		alcoholAccessorMenu[2].add(removeShot);
 		
 		removeCocktail = new JButton("-COCKTAIL");
 		removeCocktail.addActionListener(this);
+		styleButton( removeCocktail );
 		alcoholAccessorMenu[3].add(removeCocktail);
 		
 		//Navigation Button
 		returnButton = new JButton("Return");
 		returnButton.addActionListener(this);
+		styleButton( returnButton );
 		
 		healthReportButton = new JButton("Health Report");
+		healthReportButton.addActionListener(this);
+		styleButton( healthReportButton );
 
 		quizButton = new JButton("Quiz");
 		quizButton.addActionListener(this);
+		styleButton( quizButton );
 		
 	}
 	
@@ -265,10 +279,10 @@ public class MainActivity extends JPanel implements ActionListener
 
 		System.out.println("MainActivity::initGUI()");
 		//Reset all text components
-		beerLabel.setText(consumptionQuantityChar + 0);
-		wineLabel.setText(consumptionQuantityChar + 0);
-		shotLabel.setText(consumptionQuantityChar + 0);
-		cocktailLabel.setText(consumptionQuantityChar + 0);
+		beerLabel.setText(consumptionQuantityChar + participant.getCurrentBeers());
+		wineLabel.setText(consumptionQuantityChar + participant.getCurrentWine());
+		shotLabel.setText(consumptionQuantityChar + participant.getCurrentShots());
+		cocktailLabel.setText(consumptionQuantityChar + participant.getCurrentCocktails());
 		
 		
 		//Change image accordingly -> male diagram
@@ -286,7 +300,10 @@ public class MainActivity extends JPanel implements ActionListener
 		container = application.getMainFrame().getContentPane();
 		
 		//Add labels for participant
-		updateBACText("0.0000");
+    	DecimalFormat tempBAC = new DecimalFormat("#0.0000");
+    	String newBAC = tempBAC.format(participant.getCurrentBAC());
+    	
+		updateBACText(newBAC);
 		participantInfo.add(bacLabel);
 		updateCaloriesText(0);
 		participantInfo.add(caloriesLabel);
@@ -507,8 +524,7 @@ public class MainActivity extends JPanel implements ActionListener
 
         //----- Navigation ----- //
         if(command.equals("Return"))	//--> Returns to MainActivity
-        {
-        	
+        {	
         	deactivate();
         	application.setCurrentActivity(Application.CURRENT_ACTIVITY.TITLE);
         }
@@ -516,6 +532,7 @@ public class MainActivity extends JPanel implements ActionListener
         {
         	
         	deactivate();
+        	healthReport.setParticipant(participant);
         	application.setCurrentActivity(Application.CURRENT_ACTIVITY.HEALTH_REPORT);
         }
         else if(command.equals("Quiz"))	//--> Navigates to QuizActivity
@@ -637,4 +654,12 @@ public class MainActivity extends JPanel implements ActionListener
 		
 	}
 
+	public void styleButton( JButton button ) {
+		button.setBorderPainted( false );
+		button.setFocusPainted( false );
+		button.setContentAreaFilled( false );
+		button.setOpaque( true );
+		button.setBackground( new Color( 69, 50, 9 ) );
+		button.setForeground( Color.WHITE );	
+	}
 }

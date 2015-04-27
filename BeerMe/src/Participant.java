@@ -1,4 +1,3 @@
-
 public class Participant 
 {
 	private String name;
@@ -12,7 +11,7 @@ public class Participant
 	private int currentCalories;
 	
 	//Amount of hours intended drinking
-	private int hoursDrinking;
+	private double hoursDrinking;
 	
 	//Holds values of all current beverages consumed
 	private int currentBeers;
@@ -20,15 +19,14 @@ public class Participant
 	private int currentWine;
 	private int currentCocktails;
 	
-	
-	
-	public Participant(final String passedName, final int passedWeight, final GENDER passedGender)
+	public Participant(final String passedName, final int passedWeight, final GENDER passedGender, double passedHours)
 	{
 		
 		//Set participant specifics
 		name = passedName;
 		weight = passedWeight;
 		gender = passedGender;
+		hoursDrinking = passedHours;
 		
 		//Defaults
 		currentBAC = 0.00;
@@ -73,9 +71,14 @@ public class Participant
 		return (currentBeers + currentShots + currentCocktails + currentWine);
 	}
 	
-	public int getHoursDrinking()
+	public double getHoursDrinking()
 	{
 		return hoursDrinking;
+	}
+	
+	public void setHoursDrinking(double passedHoursDrinking)
+	{
+		hoursDrinking = passedHoursDrinking;
 	}
 	
 	public int getCurrentBeers()
@@ -137,7 +140,5 @@ public class Participant
 	{
 		currentBAC = passedBAC;
 	}
-
-	
 	
 }

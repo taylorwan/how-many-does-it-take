@@ -87,6 +87,7 @@ public class TitleActivity extends JPanel implements ActionListener
 		//Buttons and button group
 		startButton = new JButton(startString);
 		startButton.addActionListener(this);
+		styleButton( startButton );
 		genderButtons = new ButtonGroup();
 		maleButton = new JRadioButton(maleString);
 		maleButton.setSelected(true);
@@ -227,8 +228,9 @@ public class TitleActivity extends JPanel implements ActionListener
             	//Create Participant variables
             	String pName = nameInputBox.getText();
             	int pWeight = Integer.parseInt( weightInputBox.getText() );
-            	Participant.GENDER pGender = null; 
-            	
+            	double hoursDrinking = Double.parseDouble((String) hoursMenu.getSelectedItem());
+
+            	Participant.GENDER pGender = null;
             	//Check for gender
             	if(maleButton.isSelected())
             	{
@@ -240,7 +242,7 @@ public class TitleActivity extends JPanel implements ActionListener
             	}
             	
             	//Create participant
-            	Participant participant = new Participant(pName, pWeight, pGender);
+            	Participant participant = new Participant(pName, pWeight, pGender, hoursDrinking);
             	
             	//Give the main activity the participant
             	mainActivity.setParticipant(participant);
@@ -256,4 +258,12 @@ public class TitleActivity extends JPanel implements ActionListener
 
      } // end actionPerformed()
 
+	public void styleButton( JButton button ) {
+		button.setBorderPainted( false );
+		button.setFocusPainted( false );
+		button.setContentAreaFilled( false );
+		button.setOpaque( true );
+		button.setBackground( new Color( 69, 50, 9 ) );
+		button.setForeground( Color.WHITE );	
+	}
 }

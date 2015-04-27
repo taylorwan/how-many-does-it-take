@@ -1,39 +1,55 @@
-
-
 public class AlcoholFactory implements AlcoholProcessor
 {
 	
-	public int getCalories(ALCOHOL_TYPE whichAlcohol)
+	public int getCalories(String whichAlcohol)
 	{
 		switch(whichAlcohol)
 		{
-		case BEER:
+		case "Beer":
 			return BEER_CALORIES;
-		case WINE:
+		case "Wine":
 			return WINE_CALORIES;
-		case SHOT:
+		case "Shot":
 			return SHOT_CALORIES;
-		case COCKTAIL:
+		case "Cocktail":
 			return COCKTAIL_CALORIES;
 		}
 		
 		return -1;
 	}
 	
-	public int getOuncesPerDrink(ALCOHOL_TYPE whichAlcohol)
+	public double getOuncesPerDrink(String whichAlcohol)
 	{
 		switch(whichAlcohol)
 		{
-		case BEER:
+		case "Beer":
 			return BEER_OUNCES;
-		case WINE:
+		case "Wine":
 			return WINE_OUNCES;
-		case SHOT:
+		case "Shot":
 			return SHOT_OUNCES;
-		case COCKTAIL:
+		case "Cocktail":
 			return COCKTAIL_OUNCES;
 		}
 		
 		return -1;
+	}
+	
+	public double getAlcoholContent(String whichAlcohol)
+	{
+		switch(whichAlcohol)
+		{
+		case "Beer":
+			return BEER_CONTENT;
+		case "Wine":
+			return WINE_CONTENT;
+		case "Shot":
+			return SHOT_CONTENT;
+		case "Cocktail":
+			return COCKTAIL_CONTENT;
+		}
+		
+		return -1;
+		
 	}
 }

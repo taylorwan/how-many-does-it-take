@@ -1,38 +1,60 @@
+import java.util.ArrayList;
 
 public class HealthCalculator 
 {
-	//Formula specific constants -> calculating BAC
-	final static double AVG_ALCOHOL_CONTENT = .06;
-	final static double GRAVITY_OF_BLOOD = 1.055;
-	final static double MALE_VALUE = .68;
-	final static double FEMALE_VALUE = .55;
-	final static double ALCOHOL_METABOLIZATION = .015;
+	//Alcohol Factory object
+	private final static AlcoholFactory alcoholFactory = new AlcoholFactory();
 	
-	//Formula specific constants -> calculating calories
-	final static int BEER_CALORIES = 120; 
-	final static int WINE_CALORIES = 150; 
-	final static int SHOT_CALORIES = 96; 
-	final static int COCKTAIL_CALORIES = 200; 
+	//Formula specific constants -> calculating BAC
+	final static double COMBO_CONST = 5.14;
+	final static double MALE_VALUE = .73;
+	final static double FEMALE_VALUE = .66;
+	final static double ALCOHOL_METABOLIZATION = .015;
+
 	
 	public static double calculateBAC(Participant thisParticipant)
 	{
 		double bloodAlcoholContent = 0.00;
+		double liquidOunces = calculateLiquidOunces(thisParticipant);
 		
 		//Blood alcohol content for a male
 		if(thisParticipant.getGender() == Participant.GENDER.MALE)
 		{
-			bloodAlcoholContent = ( thisParticipant.getTotalDrinks() * AVG_ALCOHOL_CONTENT * 100 * 
-								  (GRAVITY_OF_BLOOD / thisParticipant.getWeight()) * MALE_VALUE ) - 
-								  (ALCOHOL_METABOLIZATION * thisParticipant.getHoursDrinking()); 
+			bloodAlcoholContent = ( (liquidOunces * COMBO_CONST) / (thisParticipant.getWeight() * MALE_VALUE) ) 
+								  - (ALCOHOL_METABOLIZATION * thisParticipant.getHoursDrinking());
 		}
 		else
 		{
-			bloodAlcoholContent = ( thisParticipant.getTotalDrinks() * AVG_ALCOHOL_CONTENT * 100 * 
-					  (GRAVITY_OF_BLOOD / thisParticipant.getWeight()) * FEMALE_VALUE ) - 
-					  (ALCOHOL_METABOLIZATION * thisParticipant.getHoursDrinking()); 
+			bloodAlcoholContent = ( (liquidOunces * COMBO_CONST) / (thisParticipant.getWeight() * FEMALE_VALUE) ) 
+								  - (ALCOHOL_METABOLIZATION * thisParticipant.getHoursDrinking()); 
+		}
+		
+		//Alcohol metabolization has exceeded drunkeness
+		if(bloodAlcoholContent < 0)
+		{
+			bloodAlcoholContent = 0;
 		}
 		
 		return bloodAlcoholContent;
+	}
+	
+	//Returns the liquid ounces of alcohol consumed
+	public static double calculateLiquidOunces(Participant thisParticipant)
+	{
+		double ouncesBeer = (thisParticipant.getCurrentBeers() * alcoholFactory.getOuncesPerDrink("Beer")) 
+							* alcoholFactory.getAlcoholContent("Beer");
+		
+		double ouncesWine = (thisParticipant.getCurrentWine() * alcoholFactory.getOuncesPerDrink("Wine")) 
+				* alcoholFactory.getAlcoholContent("Wine");
+		
+		double ouncesShot = (thisParticipant.getCurrentShots() * alcoholFactory.getOuncesPerDrink("Shot")) 
+				* alcoholFactory.getAlcoholContent("Shot");
+		
+		double ouncesCocktail = (thisParticipant.getCurrentCocktails() * alcoholFactory.getOuncesPerDrink("Cocktail")) 
+				* alcoholFactory.getAlcoholContent("Cocktail");
+		
+		return (ouncesBeer + ouncesWine + ouncesCocktail + ouncesShot);
+		
 	}
 	
 	//Returns 
@@ -44,8 +66,62 @@ public class HealthCalculator
 		int currentShots = thisParticipant.getCurrentShots();
 		int currentCocktails = thisParticipant.getCurrentCocktails();
 		
-		return ( (currentBeer * BEER_CALORIES) + (currentWhine * WINE_CALORIES) + 
-				 (currentShots * SHOT_CALORIES) + (currentCocktails * COCKTAIL_CALORIES) );
+		return ( (currentBeer * alcoholFactory.getCalories("Beer")) + 
+				(currentWhine * alcoholFactory.getCalories("Wine")) + 
+				 (currentShots * alcoholFactory.getCalories("Shot"))) + 
+				 (currentCocktails * alcoholFactory.getCalories("Cocktail"));
+	}
+	
+	//Takes in participant and desired BAC, returns hours needed until that
+	//particular BAC is reached
+	public static double calculateHoursNeeded(Participant thisParticipant, double desiredBAC)
+	{
+		final double amountToAdd = .5;
+		double originalHours = thisParticipant.getHoursDrinking();
+		double currentBAC = thisParticipant.getCurrentBAC();
+		
+		//Recalculate BAC till it is does not evaluate
+		//as greater than the desired
+		while(currentBAC > desiredBAC)
+		{
+			thisParticipant.setHoursDrinking(thisParticipant.getHoursDrinking() + amountToAdd);
+			currentBAC = calculateBAC(thisParticipant);
+		}
+		
+		double hoursToGo = thisParticipant.getHoursDrinking() - originalHours;
+		thisParticipant.setHoursDrinking(originalHours);
+		
+		return (hoursToGo);
+	}
+	
+	public static ArrayList<SobrietyProjectionCell> calculateHoursWithBACs(Participant thisParticipant, double desiredBAC)
+	{
+		
+		//Create list of cells
+		ArrayList<SobrietyProjectionCell> projectionCells = new ArrayList<SobrietyProjectionCell>();
+		
+		final double amountToAdd = 1;
+		double originalHours = thisParticipant.getHoursDrinking();
+		double currentBAC = thisParticipant.getCurrentBAC();
+		
+		//Recalculate BAC till it is does not evaluate
+		//as greater than the desired
+		while(currentBAC > desiredBAC)
+		{
+			
+			thisParticipant.setHoursDrinking(thisParticipant.getHoursDrinking() + amountToAdd);
+			currentBAC = calculateBAC(thisParticipant);
+			
+			//Add values for hours to cell
+			SobrietyProjectionCell hoursAndBAC = new SobrietyProjectionCell(thisParticipant.getHoursDrinking() - originalHours, currentBAC);
+			
+			//Add cell to list
+			projectionCells.add(hoursAndBAC);
+		}
+		
+		
+		thisParticipant.setHoursDrinking(originalHours);
+		return projectionCells;
 	}
 	
 }

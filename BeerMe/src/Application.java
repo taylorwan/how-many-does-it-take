@@ -19,11 +19,12 @@ public class Application extends Applet
 	private TitleActivity titleActivity;
 	private MainActivity mainActivity;
 	private QuizActivity quizActivity;
+	private HealthReport healthReport;
 	final String titleActivityFilePath = "../img/intro.jpg";
 	
 	//Screen dimension constants
-	final static int screenWidth = 800;
-	final static int screenHeight = 600;
+	private final static int screenWidth = 800;
+	private final static int screenHeight = 600;
 	
 	//Application constructor
 	public Application() throws IOException
@@ -39,7 +40,8 @@ public class Application extends Applet
 		System.out.println("Application::create()");
 		//Create all activities and current activity
 		mainFrame = new JFrame();
-		mainActivity = new MainActivity(this, quizActivity);
+		healthReport = new HealthReport(this);
+		mainActivity = new MainActivity(this, quizActivity, healthReport);
 		titleActivity = new TitleActivity(titleActivityFilePath, this, mainActivity);
 		quizActivity = new QuizActivity(this);
 		currentActivity = CURRENT_ACTIVITY.TITLE;
@@ -110,6 +112,9 @@ public class Application extends Applet
 					case QUIZ:
 						quizActivity.begin();
 						break;
+					case HEALTH_REPORT:
+						healthReport.begin();
+						break;
 				}
 				
 			}
@@ -137,6 +142,9 @@ public class Application extends Applet
 				break;
 			case QUIZ:
 				quizActivity.activate();
+				break;
+			case HEALTH_REPORT:
+				healthReport.activate();
 				break;
 		}
 	}

@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -42,6 +44,11 @@ public class QuizActivity extends JPanel implements ActionListener
 	private JLabel answerB;
 	private JLabel answerC;
 	private JLabel answerD;
+	private ButtonGroup answers;
+	private JRadioButton answerAButton;
+	private JRadioButton answerBButton;
+	private JRadioButton answerCButton;
+	private JRadioButton answerDButton;
 	private JButton submitAnswer;
 		
 	//Activity Navigation
@@ -94,26 +101,20 @@ public class QuizActivity extends JPanel implements ActionListener
 	private void create() throws IOException
 	{
 		System.out.println("QuizActivity::create()");
-
 		container = application.getMainFrame().getContentPane();
 
 		//Create the general accessor menu
-		System.out.println("QuizActivity::create()::quizLayout");
 		FlowLayout quizLayout = new FlowLayout();
 		// quizLayout.setHgap(5);
 		
-		System.out.println("QuizActivity::create()::sidebar");
 		// sidebar = new JPanel[6];
 		
 		//Participant information with Flow Layout
-		System.out.println("QuizActivity::create()::infoLayout");
 		FlowLayout infoLayout = new FlowLayout();
 		// infoLayout.setHgap(15);
-		System.out.println("QuizActivity::create()::navigation");
 		navigation = new JPanel(infoLayout);
 		
 		// panel on the right
-		System.out.println("QuizActivity::create()::sidebarHolder, layout");
 		sidebarHolder = new JPanel();
 		sidebarHolder.setLayout(new BoxLayout(sidebarHolder, BoxLayout.Y_AXIS));
 		
@@ -121,26 +122,34 @@ public class QuizActivity extends JPanel implements ActionListener
 		// ----- END Alcohol Labels ----- //
 		
 		// -- Create buttons -> For INSERTS -- //
-		System.out.println("QuizActivity::create()::questionLabel");
 		questionLabel = new JLabel("Question");
+		Dimension dim = new Dimension( 400, 20 );
+		questionLabel.setPreferredSize( dim );
 		
-		System.out.println("QuizActivity::create()::answers A-D");
 		answerA = new JLabel("Answer A");
 		answerB = new JLabel("Answer B");
 		answerC = new JLabel("Answer C");
 		answerD = new JLabel("Answer D");
 
-		System.out.println("QuizActivity::create()::next button");
+		answerAButton = new JRadioButton("Answer A");
+		answerBButton = new JRadioButton("Answer B");
+		answerCButton = new JRadioButton("Answer C");
+		answerDButton = new JRadioButton("Answer D");
+
+		answers = new ButtonGroup();
+
 		submitAnswer = new JButton("Next");
 		submitAnswer.addActionListener(this);
+		styleButton( submitAnswer );
 		
 		//Navigation Buttons
-		System.out.println("QuizActivity::create()::return");
 		returnButton = new JButton("Return");
 		returnButton.addActionListener(this);
+		styleButton( returnButton );
 
-		System.out.println("QuizActivity::create()::health report");
 		healthReportButton = new JButton("Health Report");
+		returnButton.addActionListener(this);
+		styleButton( returnButton );
 
 	}
 
@@ -150,11 +159,16 @@ public class QuizActivity extends JPanel implements ActionListener
 	{		
 		System.out.println("QuizActivity::initGUI()");
 
+		answers.add(answerAButton);
+		answers.add(answerBButton);
+		answers.add(answerCButton);
+		answers.add(answerDButton);
+
 		sidebarHolder.add(questionLabel);
-		sidebarHolder.add(answerA);
-		sidebarHolder.add(answerB);
-		sidebarHolder.add(answerC);
-		sidebarHolder.add(answerD);
+		sidebarHolder.add(answerAButton);
+		sidebarHolder.add(answerBButton);
+		sidebarHolder.add(answerCButton);
+		sidebarHolder.add(answerDButton);
 		sidebarHolder.add(submitAnswer);
 		sidebarHolder.setAlignmentY(Component.LEFT_ALIGNMENT);
 
@@ -182,33 +196,39 @@ public class QuizActivity extends JPanel implements ActionListener
 	
 	public void showQuestion() {
 		System.out.println("QuizActivity::showQuestion()");
-		System.out.println(currentQuestion == quiz.size());
 		
 		if ( currentQuestion == quiz.size() ) {
 		
-			System.out.println( "done:" + quiz.DONE );
 			questionLabel.setText( quiz.DONE + quiz.getCorrect() + "/" + quiz.size() );
 
-			answerA.setText("");
-			answerB.setText("");
-			answerC.setText("");
-			answerD.setText("");
+			answerAButton.setText("");
+			answerBButton.setText("");
+			answerCButton.setText("");
+			answerDButton.setText("");
+			sidebarHolder.remove(submitAnswer);
 
 		} else {
 
 			Question cur = quiz.get(currentQuestion);
 			int size = cur.size();
 
+			answerAButton.setSelected( false );
+			answerBButton.setSelected( false );
+			answerCButton.setSelected( false );
+			answerDButton.setSelected( false );
+
+			System.out.print(cur);
+
 			questionLabel.setText( currentQuestion+1 + ". " + cur.getText() );
 
 			if ( size > 1 )
-				answerA.setText( cur.getChoice(0) );
+				answerAButton.setText( cur.getChoice(0) );
 			if ( size > 2 )
-				answerB.setText( cur.getChoice(1) );
+				answerBButton.setText( cur.getChoice(1) );
 			if ( size > 3 )
-				answerC.setText( cur.getChoice(2) );
+				answerCButton.setText( cur.getChoice(2) );
 			if ( size > 4 )
-				answerD.setText( cur.getChoice(3) );
+				answerDButton.setText( cur.getChoice(3) );
 
 		}
 		repaint();
@@ -311,6 +331,13 @@ public class QuizActivity extends JPanel implements ActionListener
         }
 	}
 	
-
+	public void styleButton( JButton button ) {
+		button.setBorderPainted( false );
+		button.setFocusPainted( false );
+		button.setContentAreaFilled( false );
+		button.setOpaque( true );
+		button.setBackground( new Color( 69, 50, 9 ) );
+		button.setForeground( Color.WHITE );	
+	}
 
 }
