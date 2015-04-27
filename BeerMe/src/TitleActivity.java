@@ -105,9 +105,9 @@ public class TitleActivity extends JPanel implements ActionListener
 		switchActivities.setVisible(true);
 		
 		//This container will hold the title layout
-		container = application.getContentPane();
+		container = application.getMainFrame().getContentPane();
 		container.setLayout(new BorderLayout());
-		application.setLayout(new BorderLayout());
+		application.getMainFrame().setLayout(new BorderLayout());
 		
 		
 		//Drop down menu
@@ -123,14 +123,13 @@ public class TitleActivity extends JPanel implements ActionListener
 	public void initGUI()
 	{
 		container.setLayout(new BorderLayout());
-		application.getContentPane().add(this);
-		container = application.getContentPane();
+		application.getMainFrame().getContentPane().add(this);
+		container = application.getMainFrame().getContentPane();
 		
 		genderButtons.add(maleButton);
 		genderButtons.add(femaleButton);
 		
-		
-		Dimension d = new Dimension(50,50);
+		Dimension d = new Dimension(25,25);
 		nameLabel.setSize(d);
 		weightLabel.setSize(d);
 		form.add(nameLabel);
@@ -150,6 +149,25 @@ public class TitleActivity extends JPanel implements ActionListener
 		
 		container.add(form, BorderLayout.SOUTH);
 		container.add(switchActivities, BorderLayout.NORTH);
+	}
+	
+	public void activate()
+	{
+		//Re-initialize the GUI
+		initGUI();
+		
+		application.getMainFrame().getContentPane().add(this);
+		
+		//Make container visible
+		container.setVisible(true);
+	}
+	
+	//Call before changing activities
+	public void deactivate()
+	{
+		container.removeAll();
+		application.getMainFrame().getContentPane().remove(this);
+		container.setVisible(false);
 	}
 	
 	public void begin() throws InterruptedException 
@@ -220,13 +238,11 @@ public class TitleActivity extends JPanel implements ActionListener
             	//Give the main activity the participant
             	mainActivity.setParticipant(participant);
             	
-            	//Deactivate current activity
-        		container.setVisible(false);
-        		container.removeAll();
-        		application.getContentPane().removeAll();
+            	deactivate();
         		
-            	//Activate main activity
-            	mainActivity.activate();
+        		//Set new activity
+        		application.setCurrentActivity(Application.CURRENT_ACTIVITY.MAIN);
+        		
         	}
         	
         }

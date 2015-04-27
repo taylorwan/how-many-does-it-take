@@ -6,17 +6,19 @@ import java.io.IOException;
 import javax.swing.JFrame;
 
 
-public class Application extends JFrame
+public class Application
 {
 	//Keeping track of activities
 	public enum CURRENT_ACTIVITY {TITLE, MAIN};
 	private static CURRENT_ACTIVITY currentActivity;
 	
+	private JFrame mainFrame;
+	
 	//Activities
 	private TitleActivity titleActivity;
 	private MainActivity mainActivity;
 	
-	final String titleActivityFilePath = "../img/intro.jpg";
+	final String titleActivityFilePath = "/Users/danielanderson/Desktop/start_screen2.png";
 	
 	//Screen dimension constants
 	final static int screenWidth = 800;
@@ -35,6 +37,7 @@ public class Application extends JFrame
 	{
 		
 		//Create all activities and current activity
+		mainFrame = new JFrame();
 		mainActivity = new MainActivity(this);
 		titleActivity = new TitleActivity(titleActivityFilePath, this, mainActivity);
 		currentActivity = CURRENT_ACTIVITY.TITLE;
@@ -46,27 +49,18 @@ public class Application extends JFrame
 	{
 		
 		//Init GUI components of the JFrame
-		setLocation(0,0);
+		mainFrame.setLocation(0,0);
 		Color color = new Color(0,0,0,0);
-		setForeground(color);
-		setSize(screenWidth, screenHeight);
-		setResizable(false);
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setForeground(color);
+		mainFrame.setSize(screenWidth, screenHeight);
+		mainFrame.setResizable(false);
+		mainFrame.setVisible(true);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	//Main processing function
 	public static void main(String[] args) 
 	{
-		
-		Color gray = Color.gray;
-		int pix = gray.getRGB();
-		int r = (pix >> 16) & 0xFF;
-		int g = (pix >> 8) & 0xFF;
-		int b = pix & 0xFF;
-		System.out.println(r);
-		System.out.println(g);
-		System.out.println(b);
 		
 		//Try application
 		try
@@ -124,6 +118,20 @@ public class Application extends JFrame
 	public void setCurrentActivity(CURRENT_ACTIVITY passedActivity)
 	{
 		currentActivity = passedActivity;
+		
+		switch(currentActivity)
+		{
+		case TITLE:
+			titleActivity.activate();
+		case MAIN:
+			mainActivity.activate();
+		}
+	}
+	
+	//Returns the main frame
+	public JFrame getMainFrame()
+	{
+		return mainFrame;
 	}
 	
 	
