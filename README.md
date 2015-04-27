@@ -1,4 +1,6 @@
-# how-many-does-it-take
+# Beer Me
+# Alcohol Awareness
+
 A java applet for keeping track of Blood Alcohol Concentration 
 
 Beer Me is an Alcohol Awareness Application that does the following:
