@@ -78,17 +78,19 @@ public class Quiz {
 		answerChoices.clear();
 		
 		//Question 4
-		prompt = "What should you do at your current BAC level of " + thisParticipant.getCurrentBAC();
+
+		double curBAC = thisParticipant.getCurrentBAC();
+		prompt = "What should you do at your current BAC level of " + curBAC;
 		answerChoices.add("Pace drinking and remember to drink water");
 		answerChoices.add("Stop drinking alcohol and start drinking water");
 		answerChoices.add("Leave the party and consume water");
 		answerChoices.add("Seek medical attention immediately");
 		
-		if (thisParticipant.getCurrentBAC() < .08)
+		if ( curBAC < .08)
 			correct = "Pace drinking and remember to drink water";
-		else if (thisParticipant.getCurrentBAC() < .12)
+		else if ( curBAC < .12)
 			correct = "Stop drinking alcohol and start drinking water";
-		else if (thisParticipant.getCurrentBAC() < .16)
+		else if ( curBAC < .16)
 			correct = "Leave the party and consume a lot of water";
 		else
 			correct = "Seek medical attention immediately";
