@@ -17,16 +17,16 @@ public class Question
 		rationale = reasoning;
 	}
 
-	public String getQuestion() {
+	public String getText() {
 		return question;
 	}
 	public String getChoice( int i ) {
 		return answerChoices.get(i);
 	}
-	public int getSize() {
+	public int size() {
 		return answerChoices.size();
 	}
-	public String isCorrect( String answer ) {
+	public boolean isCorrect( String answer ) {
 		return answer.equals(correctAnswer);
 	}
 	public String getRationale() {

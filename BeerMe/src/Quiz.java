@@ -4,22 +4,26 @@ import java.util.ArrayList;
 public class Quiz {
 
 	private ArrayList<Question> questions = new ArrayList<>();
+	private Participant thisParticipant;
 	private int numQuestions, numCorrect;
+
+	final static String DONE = "Congrats! You're done.";
 	
-	public Quiz()
+	public Quiz( Participant guy )
 	{
 		createQuestions();
 		numQuestions = questions.size();
 		numCorrect = 0;
+		thisParticipant = guy;
 	}
 
-	public getNumQs() {
+	public int size() {
 		return numQuestions;
 	}
-	public getNumCorrect() {
+	public int getNumCorrect() {
 		return numCorrect;
 	}
-	public getQuestion( int i ) {
+	public Question get( int i ) {
 		return questions.get(i);
 	}
 

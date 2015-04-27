@@ -26,7 +26,6 @@ public class MainActivity extends JPanel implements ActionListener
 	
 	//Main application for Activity Navigation
 	private Application application;
-	private QuizActivity quizActivity;
 	private JPanel alcoholAccessorMenu[];
 	private Container container;
 	
@@ -100,19 +99,16 @@ public class MainActivity extends JPanel implements ActionListener
 	private JPanel navigation;
 	private JButton returnButton;
 	private JButton healthReportButton;
-	private JButton quizButton;
 	
 	//Participant
 	private Participant participant;
 	
 	//Constructor
-	public MainActivity(Application passedApplication, QuizActivity passedQuizActivity) throws IOException
+	public MainActivity(Application passedApplication) throws IOException
 	{
-		System.out.println("MainActivity::MainActivity()");
 		//Set the application and use it to create 
 		//a custom container exclusive to MainActivity
 		application = passedApplication;
-		quizActivity = passedQuizActivity;
 		
 		//Create image of the male body
 		bodyFigure = Toolkit.getDefaultToolkit().getImage(maleBodyFilepath);
@@ -124,7 +120,6 @@ public class MainActivity extends JPanel implements ActionListener
 	//create all components of MainActivity
 	private void create() throws IOException
 	{
-		System.out.println("MainActivity::create()");
 		
 		//Create the general accessor menu
 		FlowLayout buttonLayout = new FlowLayout();
@@ -215,37 +210,37 @@ public class MainActivity extends JPanel implements ActionListener
 		// ----- END Alcohol Labels ----- //
 		
 		// -- Create buttons -> For INSERTS -- //
-		addBeer = new JButton("+BEER");
-		addBeer.addActionListener(this);
+		addBeer = new JButton("+1");
+		addBeer.addBeerListener(this);
 		alcoholAccessorMenu[0].add(addBeer);
 		
-		addWine = new JButton("+WINE");
-		addWine.addActionListener(this);
+		addWine = new JButton("+1");
+		addWine.addWineListener(this);
 		alcoholAccessorMenu[1].add(addWine);
 		
-		addShot = new JButton("+SHOT");
-		addShot.addActionListener(this);
+		addShot = new JButton("+1");
+		addShot.addShotListener(this);
 		alcoholAccessorMenu[2].add(addShot);
 		
-		addCocktail = new JButton("+COCKTAIL");
-		addCocktail.addActionListener(this);
+		addCocktail = new JButton("+1");
+		addCocktail.addCocktailListener(this);
 		alcoholAccessorMenu[3].add(addCocktail);
 		
 		//Create buttons -> For REMOVALS
-		removeBeer = new JButton("-BEER");
-		removeBeer.addActionListener(this);
+		removeBeer = new JButton("-1");
+		removeBeer.removeBeerListener(this);
 		alcoholAccessorMenu[0].add(removeBeer);
 		
-		removeWine = new JButton("-WINE");
-		removeWine.addActionListener(this);
+		removeWine = new JButton("-1");
+		removeWine.removeWineListener(this);
 		alcoholAccessorMenu[1].add(removeWine);
 		
-		removeShot = new JButton("-SHOT");
-		removeShot.addActionListener(this);
+		removeShot = new JButton("-1");
+		removeShot.removeShotListener(this);
 		alcoholAccessorMenu[2].add(removeShot);
 		
-		removeCocktail = new JButton("-COCKTAIL");
-		removeCocktail.addActionListener(this);
+		removeCocktail = new JButton("-1");
+		removeCocktail.removeCocktailListener(this);
 		alcoholAccessorMenu[3].add(removeCocktail);
 		
 		//Navigation Button
@@ -253,17 +248,12 @@ public class MainActivity extends JPanel implements ActionListener
 		returnButton.addActionListener(this);
 		
 		healthReportButton = new JButton("Health Report");
-
-		quizButton = new JButton("Quiz");
-		quizButton.addActionListener(this);
 		
 	}
 	
 	//Create the GUI
 	private void initGUI()
 	{
-
-		System.out.println("MainActivity::initGUI()");
 		//Reset all text components
 		beerLabel.setText(consumptionQuantityChar + 0);
 		wineLabel.setText(consumptionQuantityChar + 0);
@@ -295,7 +285,6 @@ public class MainActivity extends JPanel implements ActionListener
 		//Add buttons to navigation
 		navigation.add(returnButton);
 		navigation.add(healthReportButton);
-		navigation.add(quizButton);
 		navigation.setBackground(Color.LIGHT_GRAY);
 		
 		//Add to the top of the east panel
@@ -318,7 +307,6 @@ public class MainActivity extends JPanel implements ActionListener
 	@Override
 	protected void paintComponent(Graphics thisGraphic)
 	{
-		// System.out.println("MainActivity::paintComponent()");
 		
 		super.paintComponent(thisGraphic);
 		
@@ -331,7 +319,6 @@ public class MainActivity extends JPanel implements ActionListener
 		//Draw image layer one
 		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
 		
-		//Updates the fill for the background color
 		updateBodyFill(rectGraphic);
 		
 		//Draw image layer two
@@ -345,7 +332,6 @@ public class MainActivity extends JPanel implements ActionListener
 	
 	private int getBACState()
 	{
-		// System.out.println("MainActivity::getBACState()");
 		//Decide fill color based on heights, etc
 		if(participant.getCurrentBAC() < drivingLimit)
 		{
@@ -369,7 +355,6 @@ public class MainActivity extends JPanel implements ActionListener
 	
 	private void updateBodyFill(Graphics2D rectGraphic)
 	{
-		// System.out.println("MainActivity::updateBodyFill()");
 		//Calculate the max height
 		final double maxHeight = (double) bodyFigure.getHeight(this);
 		
@@ -413,7 +398,6 @@ public class MainActivity extends JPanel implements ActionListener
 	//current activity
 	public void activate()
 	{
-		System.out.println("MainActivity::activate()");
 		//Re-initialize the GUI
 		initGUI();
 		
@@ -425,7 +409,6 @@ public class MainActivity extends JPanel implements ActionListener
 	//Call before changing activities
 	public void deactivate()
 	{
-		System.out.println("MainActivity::deactivate()");
 		container.removeAll();
 		application.getMainFrame().getContentPane().remove(this);
 		container.setVisible(false);
@@ -434,7 +417,7 @@ public class MainActivity extends JPanel implements ActionListener
 	//Start the activity processing
 	public void begin() throws InterruptedException
 	{
-		// System.out.println("MainActivity::begin()");	
+		
 		repaint();
 		Thread.sleep(10);
 	}
@@ -442,93 +425,79 @@ public class MainActivity extends JPanel implements ActionListener
 	//Set the participant
 	public void setParticipant(Participant passedParticipant)
 	{
-		System.out.println("MainActivity::setParticipant()");
 		participant = passedParticipant;
 		bacLabel.setText(bacLabelString + participant.getCurrentBAC());
 		caloriesLabel.setText(caloriesLabelString + participant.getCurrentCalories());
 	}
 	
 	//Implemented Action Listener Function
-	public void actionPerformed(ActionEvent evt) 
-	{
-
-        String command = evt.getActionCommand();
-		System.out.println( "MainActivity::actionPerformed() with command " + command );
-        
-        //If user chooses to add or remove Beer
-        if (command.equals("+BEER"))
-        {
-        	addAlcohol(AlcoholFactory.ALCOHOL_TYPE.BEER);
-        }
-        if(command.equals("-BEER") && participant.getCurrentBeers() > 0)
-        {
-        	removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.BEER);
-        }
-        
-        //If user chooses to add or remove Wine
-        if (command.equals("+WINE"))
-        {
-        	addAlcohol(AlcoholFactory.ALCOHOL_TYPE.WINE);
-        }
-        if(command.equals("-WINE") && participant.getCurrentWine() > 0)
-        {
-        	removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.WINE);
-        }
-        
-        //If user chooses to add or remove a shot
-        if (command.equals("+SHOT"))
-        {
-        	addAlcohol(AlcoholFactory.ALCOHOL_TYPE.SHOT);
-        }
-        if(command.equals("-SHOT") && participant.getCurrentShots() > 0)
-        {
-        	removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.SHOT);
-        }
-        //If user chooses to add or remove a shot
-        if (command.equals("+COCKTAIL"))
-        {
-        	addAlcohol(AlcoholFactory.ALCOHOL_TYPE.COCKTAIL);
-        }
-        if(command.equals("-COCKTAIL") && participant.getCurrentCocktails() > 0)
-        {
-        	removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.COCKTAIL);
-        }
-        
-        //Handles navigation between activities if necessary
-        handleNavigation(evt, command);
-       
-
-     } // end actionPerformed()
 	
-	//Handles navigation between activities
-	private void handleNavigation(ActionEvent evt, String command)
-	{
-		System.out.println("MainActivity::handleNavigation()");
+	class addBeerListener implements ActionListener {
 
-        //----- Navigation ----- //
-        if(command.equals("Return"))	//--> Returns to MainActivity
-        {
-        	
-        	deactivate();
-        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.TITLE);
-        }
-        else if(command.equals("Health Report"))	//--> Navigates to HealthReportActivity
-        {
-        	
-        	deactivate();
-        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.HEALTH_REPORT);
-        }
-        else if(command.equals("Quiz"))	//--> Navigates to QuizActivity
-        {
-        	quizActivity.setParticipant(participant);
-        	deactivate();
-        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.QUIZ);
-        }
+		public void actionPerformed(ActionEvent evt) 
+		{
+			addAlcohol(AlcoholFactory.ALCOHOL_TYPE.BEER);
+		}
 	}
+	class removeBeerListener implements ActionListener {
+		public void actionPerformed(ActionEvent evt) {
+			removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.BEER);
+		}
+	}
+	class addWineListener implements ActionListener {
+		public void actionPerformed(ActionEvent evt) {
+			addAlcohol(AlcoholFactory.ALCOHOL_TYPE.WINE);
+		}
+	}
+	class removeWineListener implements ActionListener {
+		public void actionPerformed(ActionEvent evt) {
+			removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.WINE);
+		}
+	}
+	class addShotListener implements ActionListener {
+		public void actionPerformed(ActionEvent evt) {
+			addAlcohol(AlcoholFactory.ALCOHOL_TYPE.SHOT);
+		}
+	}
+	class removeShotListener implements ActionListener {
+		public void actionPerformed(ActionEvent evt) {
+			removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.SHOT);
+		}
+	}
+	class addCocktailistener implements ActionListener {
+		public void actionPerformed(ActionEvent evt) {
+			addAlcohol(AlcoholFactory.ALCOHOL_TYPE.COCKTAIL);
+		}
+	}
+	class removeCocktailistener implements ActionListener {
+		public void actionPerformed(ActionEvent evt) {
+			removeAlcohol(AlcoholFactory.ALCOHOL_TYPE.COCKTAIL);
+		}
+	}
+	public void actionPerformed(ActionEvent evt) {
+
+			String command = evt.getActionCommand();
+
+	        //Navigation
+	        if(command.equals("Return"))
+	        {
+	        	deactivate();
+	        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.TITLE);
+	        }
+	        if(command.equals("Health Report"))
+	        {
+	        	
+	        	deactivate();
+	        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.TITLE);
+	        }
+
+	     } // end actionPerformed()
 	
+	}
+
 	private void addAlcohol(AlcoholFactory.ALCOHOL_TYPE whichAlcohol)
 	{
-		System.out.println("MainActivity::addAlcohol()");
+		
 		//If maximum alcohol is reached
 		if(participant.getCurrentBAC() >= .3 )
 		{
@@ -579,7 +548,6 @@ public class MainActivity extends JPanel implements ActionListener
 	
 	private void removeAlcohol(AlcoholFactory.ALCOHOL_TYPE whichAlcohol)
 	{
-		System.out.println("MainActivity::removeAlcohol()");
 		//Decide which alcohol to alter
 		switch(whichAlcohol)
 		{
@@ -623,7 +591,6 @@ public class MainActivity extends JPanel implements ActionListener
 	
 	private void updateBACText(String participantBAC)
 	{
-		// System.out.println("MainActivity::updateBACText()");
 		String result = bacLabelString + participantBAC + fontHtmlCloser;
 		bacLabel.setText(String.format(result, "white"));
 		
@@ -631,7 +598,6 @@ public class MainActivity extends JPanel implements ActionListener
 	
 	private void updateCaloriesText(int participantCalories)
 	{
-		// System.out.println("MainActivity::updateCaloriesText()");
 		String result = caloriesLabelString + participantCalories + fontHtmlCloser;
 		caloriesLabel.setText(String.format(result, "white"));
 		

@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 public class Application extends Applet
 {
 	//Keeping track of activities
-	public enum CURRENT_ACTIVITY {TITLE, MAIN};
+	public enum CURRENT_ACTIVITY {TITLE, MAIN, HEALTH_REPORT, QUIZ};
 	private static CURRENT_ACTIVITY currentActivity;
 	
 	private JFrame mainFrame;
@@ -18,7 +18,7 @@ public class Application extends Applet
 	//Activities
 	private TitleActivity titleActivity;
 	private MainActivity mainActivity;
-	
+	private QuizActivity quizActivity;
 	final String titleActivityFilePath = "../img/intro.jpg";
 	
 	//Screen dimension constants
@@ -28,7 +28,7 @@ public class Application extends Applet
 	//Application constructor
 	public Application() throws IOException
 	{
-		
+		System.out.println("Application::Application()");
 		create();
 		initGUI();
 	}
@@ -36,11 +36,12 @@ public class Application extends Applet
 	//Internal application creation function
 	private void create() throws IOException
 	{
-		
+		System.out.println("Application::create()");
 		//Create all activities and current activity
 		mainFrame = new JFrame();
-		mainActivity = new MainActivity(this);
+		mainActivity = new MainActivity(this, quizActivity);
 		titleActivity = new TitleActivity(titleActivityFilePath, this, mainActivity);
+		quizActivity = new QuizActivity(this);
 		currentActivity = CURRENT_ACTIVITY.TITLE;
 		//setContentPane(titleActivity);
 	}
@@ -48,7 +49,7 @@ public class Application extends Applet
 	//Creates all the GUI components
 	private void initGUI()
 	{
-		
+		System.out.println("Application::initGUI()");
 		//Init GUI components of the JFrame
 		mainFrame.setLocation(0,0);
 		Color color = new Color(0,0,0,0);
@@ -62,6 +63,7 @@ public class Application extends Applet
 	//Main processing function
 	public static void main(String[] args) 
 	{
+		System.out.println("Application::main()");
 		
 		//Try application
 		try
@@ -93,6 +95,7 @@ public class Application extends Applet
 	{
 		try
 		{
+			System.out.println("Application::runApp()");
 			//Application Loop
 			while(true)
 			{
@@ -105,7 +108,7 @@ public class Application extends Applet
 						mainActivity.begin();
 						break;
 					case QUIZ:
-						mainActivity.begin();
+						quizActivity.begin();
 						break;
 				}
 				
@@ -121,6 +124,7 @@ public class Application extends Applet
 	//Sets the current activity for application control
 	public void setCurrentActivity(CURRENT_ACTIVITY passedActivity)
 	{
+		System.out.println("Application::setCurrentActivity()");
 		currentActivity = passedActivity;
 		
 		switch(currentActivity)
@@ -130,7 +134,7 @@ public class Application extends Applet
 			case MAIN:
 				mainActivity.activate();
 			case QUIZ:
-				mainActivity.activate();
+				quizActivity.activate();
 		}
 	}
 	

@@ -73,6 +73,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	public TitleActivity(final String filePath, Application passedApplication, MainActivity passedMainActivity) throws IOException
 	{
+		System.out.println("TitleActivity::TitleActivity()");
 		//Set the application and other important components
 		application = passedApplication;
 		mainActivity = passedMainActivity;
@@ -122,6 +123,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	public void initGUI()
 	{
+		System.out.println("TitleActivity::initGUI()");
 		container.setLayout(new BorderLayout());
 		application.getMainFrame().getContentPane().add(this);
 		container = application.getMainFrame().getContentPane();
@@ -153,6 +155,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	public void activate()
 	{
+		System.out.println("TitleActivity::activate()");
 		//Re-initialize the GUI
 		initGUI();
 		
@@ -165,6 +168,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	//Call before changing activities
 	public void deactivate()
 	{
+		System.out.println("TitleActivity::deactivate()");
 		container.removeAll();
 		application.getMainFrame().getContentPane().remove(this);
 		container.setVisible(false);
@@ -172,6 +176,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	public void begin() throws InterruptedException 
 	{
+		// System.out.println("TitleActivity::begin()");
 		repaint();
 		Thread.sleep(10);
 	}
@@ -179,13 +184,14 @@ public class TitleActivity extends JPanel implements ActionListener
 	@Override
 	protected void paintComponent(Graphics thisGraphic)
 	{
-		
+		// System.out.println("TitleActivity::paintComponent()");
 		super.paintComponent(thisGraphic);
 		thisGraphic.drawImage(backgroundImage, 0, 0, this);
 	}
 	
 	private boolean weightIsGood()
 	{
+		System.out.println("TitleActivity::weightIsGood()");
 		if(Integer.parseInt(weightInputBox.getText()) < 0)
 		{
 			return false;
@@ -196,6 +202,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	private boolean nameIsGood() throws IllegalArgumentException
 	{
+		System.out.println("TitleActivity::nameIsGood()");
 		if(nameInputBox.getText() == null)
 		{
 			return false;
@@ -207,7 +214,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	//Implemented Action Listener Function
 	public void actionPerformed(ActionEvent evt) 
 	{
-		
+		System.out.println("TitleActivity::actionPerformed()");
         String command = evt.getActionCommand();
         
         //If start button is pressed we want to aquire
