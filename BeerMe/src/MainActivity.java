@@ -4,14 +4,17 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -80,9 +83,9 @@ public class MainActivity extends JPanel implements ActionListener
 	private final static String bacLabelString = "<html><font color = '%s'> MY BAC: ";
 	private final static String caloriesLabelString = "<html><font color = '%s'> MY CALORIES: ";
 	private final static String fontHtmlCloser = "</font></html>";
-	private final static String maleBodyFilepath = "../img/body_fill.png";
-	private final static String femaleBodyFilepath = "../img/female-w-trans.png";
-	private final static String bodyPegsFilepath = "../img/body_pegs.png";
+	private final static String maleBodyFilepath = "img/body_fill.png";
+	private final static String femaleBodyFilepath = "img/female-w-trans.png";
+	private final static String bodyPegsFilepath = "img/body_pegs.png";
 	
 	//Consumption Quantity Character
 	private final static String consumptionQuantityChar = "x";
@@ -166,7 +169,7 @@ public class MainActivity extends JPanel implements ActionListener
 		// ----- Alcohol labels ----- //
 		
 		//BEER LABEL//
-		beerIcon = new ImageIcon("../img/beer_icon.png");
+		beerIcon = new ImageIcon("img/beer_icon.png");
 		beerLabel = new JLabel(beerIcon);
 		
 		//Create hover over
@@ -178,7 +181,7 @@ public class MainActivity extends JPanel implements ActionListener
 		alcoholAccessorMenu[0].add(beerLabel);
 		
 		//WINE LABEL//
-		wineIcon = new ImageIcon("../img/wine_icon.png");
+		wineIcon = new ImageIcon("img/wine_icon.png");
 		wineLabel = new JLabel(wineIcon);
 		
 		//Create hover over
@@ -191,7 +194,7 @@ public class MainActivity extends JPanel implements ActionListener
 		
 		
 		//SHOT LABEL//
-		shotIcon = new ImageIcon("../img/shot_icon.png");
+		shotIcon = new ImageIcon("img/shot_icon.png");
 		shotLabel = new JLabel(shotIcon);
 		
 		//Create hover over
@@ -203,7 +206,7 @@ public class MainActivity extends JPanel implements ActionListener
 		alcoholAccessorMenu[2].add(shotLabel);
 		
 		//COCKTAIL LABEL//
-		cocktailIcon = new ImageIcon("../img/cocktail_icon.png");
+		cocktailIcon = new ImageIcon("img/cocktail_icon.png");
 		cocktailLabel = new JLabel(cocktailIcon);
 		
 		//Create hover over
@@ -284,7 +287,6 @@ public class MainActivity extends JPanel implements ActionListener
 		shotLabel.setText(consumptionQuantityChar + participant.getCurrentShots());
 		cocktailLabel.setText(consumptionQuantityChar + participant.getCurrentCocktails());
 		
-		
 		//Change image accordingly -> male diagram
 		if(participant.getGender() == Participant.GENDER.MALE)
 		{		
@@ -340,7 +342,7 @@ public class MainActivity extends JPanel implements ActionListener
 		super.paintComponent(thisGraphic);
 		
 		Graphics2D rectGraphic = (Graphics2D) thisGraphic;
-		
+	
 		//Set color for the base fill and draw the rectangle behind the figure
 		rectGraphic.setColor(Color.black);
 		rectGraphic.fillRect(bodyPositionX, bodyPositionY, bodyFigure.getWidth(this), bodyFigure.getHeight(this));
@@ -358,6 +360,17 @@ public class MainActivity extends JPanel implements ActionListener
 		//shown on the edges
 		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
 		thisGraphic.drawImage(bodyPegs, bodyPositionX-150, bodyPositionY-5, this);
+		
+        int xPoly[] = {150, 250, 325, 375, 450, 275, 100};
+        int yPoly[] = {150, 100, 125, 225, 250, 375, 300};
+        
+//        Polygon poly = new Polygon(xPoly, yPoly, xPoly.length);
+//        thisGraphic.setColor(Color.BLUE);
+//        thisGraphic.drawPolygon(poly);
+        Chart test = new Chart(participant);
+        test.paint(rectGraphic);
+		
+        
 	}
 	
 	private int getBACState()
@@ -530,10 +543,11 @@ public class MainActivity extends JPanel implements ActionListener
         }
         else if(command.equals("Health Report"))	//--> Navigates to HealthReportActivity
         {
-        	
+        	System.out.println("clicked health report");
         	deactivate();
         	healthReport.setParticipant(participant);
         	application.setCurrentActivity(Application.CURRENT_ACTIVITY.HEALTH_REPORT);
+        	
         }
         else if(command.equals("Quiz"))	//--> Navigates to QuizActivity
         {

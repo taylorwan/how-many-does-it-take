@@ -10,7 +10,7 @@ public class ChartTest {
 	{
 		Participant newPerson = new Participant("Bob", 150, Participant.GENDER.MALE, 1);
 		
-		chart newChart = new chart(newPerson);
+		Chart newChart = new Chart(newPerson);
 		assertEquals(newChart.participant.getName(), "Bob");
 	}
 	
@@ -19,7 +19,7 @@ public class ChartTest {
 	public void lineLengthTest() 
 	{
 		Participant newPerson = new Participant("Bob", 150, Participant.GENDER.MALE, 1);
-		chart newChart = new chart(newPerson);
+		Chart newChart = new Chart(newPerson);
 		
 		newChart.participant.setCurrentBeers(5);
 		newChart.participant.setCurrentShots(1);
@@ -38,7 +38,7 @@ public class ChartTest {
 	public void coordinateTest()
 	{
 		Participant newPerson = new Participant("Bob", 150, Participant.GENDER.MALE, 1);
-		chart newChart = new chart(newPerson);
+		Chart newChart = new Chart(newPerson);
 		
 		newChart.lineLengths[0] = 10.0;
 		newChart.lineLengths[1] = 12.5;

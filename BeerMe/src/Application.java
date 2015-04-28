@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 public class Application extends Applet
 {
 	//Keeping track of activities
-	public enum CURRENT_ACTIVITY {TITLE, MAIN, HEALTH_REPORT, QUIZ};
+	public enum CURRENT_ACTIVITY {TITLE, MAIN, HEALTH_REPORT, HEALTH_CHART, QUIZ};
 	private static CURRENT_ACTIVITY currentActivity;
 	
 	private JFrame mainFrame;
@@ -20,11 +20,12 @@ public class Application extends Applet
 	private MainActivity mainActivity;
 	private QuizActivity quizActivity;
 	private HealthReport healthReport;
-	final String titleActivityFilePath = "../img/intro.jpg";
+	private HealthChart healthChart;
+	final String titleActivityFilePath = "img/intro.jpg";
 	
 	//Screen dimension constants
-	private final static int screenWidth = 800;
-	private final static int screenHeight = 600;
+	final static int screenWidth = 800;
+	final static int screenHeight = 600;
 	
 	//Application constructor
 	public Application() throws IOException
@@ -38,14 +39,36 @@ public class Application extends Applet
 	private void create() throws IOException
 	{
 		System.out.println("Application::create()");
-		//Create all activities and current activity
+		
+		//Set the main Frame for the application
 		mainFrame = new JFrame();
+		
+		//Create all activities and current activity
+		createActivities();
+		
+		//Set the current activity to the title screen
+		setCurrentActivity(CURRENT_ACTIVITY.TITLE);
+		
+		//mainFrame.setContentPane(titleActivity);
+	}
+	
+	private void createActivities() throws IOException
+	{
+		//Create the health report
 		healthReport = new HealthReport(this);
+		
+		//Create the main activity
 		mainActivity = new MainActivity(this, quizActivity, healthReport);
+		
+		//Create the title activity
 		titleActivity = new TitleActivity(titleActivityFilePath, this, mainActivity);
+		
+		//Create the quiz activity
 		quizActivity = new QuizActivity(this);
-		currentActivity = CURRENT_ACTIVITY.TITLE;
-		//setContentPane(titleActivity);
+		
+		//Create the health chart 
+		healthChart = new HealthChart(this);
+	
 	}
 	
 	//Creates all the GUI components
@@ -115,6 +138,9 @@ public class Application extends Applet
 					case HEALTH_REPORT:
 						healthReport.begin();
 						break;
+					case HEALTH_CHART:
+						healthChart.begin();
+						break;
 				}
 				
 			}
@@ -146,6 +172,9 @@ public class Application extends Applet
 			case HEALTH_REPORT:
 				healthReport.activate();
 				break;
+			case HEALTH_CHART:
+				healthChart.activate();
+				break;
 		}
 	}
 	
@@ -153,6 +182,25 @@ public class Application extends Applet
 	public JFrame getMainFrame()
 	{
 		return mainFrame;
+	}
+	
+	public <T> T getActivity(String thisActivity)
+	{
+	   switch (thisActivity)
+	   {
+	   case "mainActivity":
+		   return (T) mainActivity;
+	   case "titleActivity":
+		   return (T) titleActivity;
+	   case "healthReport":
+		   return (T) healthReport;
+	   case "healthChart":
+		   return (T) healthChart;
+	   case "quizActivity":
+		   return (T) quizActivity;
+		 default:
+			 throw new IllegalArgumentException("ERROR: Activity not found");
+	   }
 	}
 	
 	

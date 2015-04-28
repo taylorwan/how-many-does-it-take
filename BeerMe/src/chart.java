@@ -1,8 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 
 
-public class chart 
+public class Chart 
 {
 	//Rate constants per drink	
 	private final double BRAIN_BEER = 6.0, BRAIN_WINE = 3.0, BRAIN_SHOT = 7.6, BRAIN_COCKTAIL = 6.8;
@@ -10,8 +11,8 @@ public class chart
 	private final double LIVER_BEER = 5.0, LIVER_WINE = 5.4, LIVER_SHOT = 9.0, LIVER_COCKTAIL = 6.4;
 	private final double KIDNEY_BEER = 4.0, KIDNEY_WINE = 1.0, KIDNEY_SHOT = 6.0, KIDNEY_COCKTAIL = 5.0;
 	
-	//Middle of chart coordinates
-	private final double xMiddle = 200.0, yMiddle = 200.0;
+	//Middle of chart coordinates in the middle of the frame
+	private final double xMiddle = Application.screenWidth/2, yMiddle = Application.screenHeight/2;
 	
 	//Line slopes for each organ
 	private final double[] xConstants = {0, 1, 0, -1};
@@ -23,19 +24,22 @@ public class chart
 	int[] yPoints = new int [4];
 	double[] lineLengths = new double[4];
 	
+	//The participant needed to create the chart
 	Participant participant;
 	
-	public chart(Participant person)
+	public Chart(Participant person)
 	{
+		System.out.println("Chart::Chart()");
 		participant = person;
 		
+		//Calculate values for drawing the chart
 		calculateLineLengths();
-		//calculateCoordinates();
+		calculateCoordinates();
 	}
 	
 	public void calculateCoordinates()
 	{	
-		
+		System.out.println("Chart::calculateCoordinates()");
 		for (int i = 0; i < 4; i++)
 		{
 			xPoints[i] = (int) (xMiddle + lineLengths[i] * xConstants[i]);
@@ -45,6 +49,7 @@ public class chart
 	
 	public void calculateLineLengths()
 	{
+		System.out.println("Chart::calculateLineLengths()");
 		lineLengths[0] = participant.getCurrentBeers() * BRAIN_BEER + participant.getCurrentWine() * BRAIN_WINE+
 						 participant.getCurrentShots() * BRAIN_SHOT + participant.getCurrentCocktails() * BRAIN_COCKTAIL;
 		
@@ -58,9 +63,10 @@ public class chart
 						 participant.getCurrentShots() * KIDNEY_SHOT + participant.getCurrentCocktails() * KIDNEY_COCKTAIL;
 	}
 	
-	public void paint(Graphics2D myGraphic) 
+	public void paint(Graphics2D g) 
 	{
-		myGraphic.setColor(Color.CYAN);
-		myGraphic.drawPolygon(xPoints, yPoints, 4);
+		g.setColor(Color.CYAN);
+		Polygon poly = new Polygon(xPoints, yPoints, 4);
+		g.drawPolygon(poly);
 	}
 }

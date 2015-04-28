@@ -177,7 +177,7 @@ public class TitleActivity extends JPanel implements ActionListener
 	
 	public void begin() throws InterruptedException 
 	{
-		// System.out.println("TitleActivity::begin()");
+		System.out.println("TitleActivity::begin()");
 		repaint();
 		Thread.sleep(10);
 	}
