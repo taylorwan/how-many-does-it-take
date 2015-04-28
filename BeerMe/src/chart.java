@@ -2,11 +2,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 
-public class Chart {
-
+public class chart 
+{
 	//Rate constants per drink	
 	private final double BRAIN_BEER = 6.0, BRAIN_WINE = 3.0, BRAIN_SHOT = 7.6, BRAIN_COCKTAIL = 6.8;
-	private final double HEART_BEER = 7.0, HEART_WINE = 6.0, HEART_SHOT = 8.0, HEART_COCKTAIL = 7.0;
+	private final double HEART_BEER = 7.0, HEART_WINE = 2.0, HEART_SHOT = 8.0, HEART_COCKTAIL = 7.0;
 	private final double LIVER_BEER = 5.0, LIVER_WINE = 5.4, LIVER_SHOT = 9.0, LIVER_COCKTAIL = 6.4;
 	private final double KIDNEY_BEER = 4.0, KIDNEY_WINE = 1.0, KIDNEY_SHOT = 6.0, KIDNEY_COCKTAIL = 5.0;
 	
@@ -19,18 +19,18 @@ public class Chart {
 	
 	//Array of points for the polygon
 	//0 for brain, 1 for heart, 2 for liver, 3 for kidney
-	int[] xPoints;
-	int[] yPoints;
-	double[] lineLengths;
+	int[] xPoints = new int[4];
+	int[] yPoints = new int [4];
+	double[] lineLengths = new double[4];
 	
 	Participant participant;
 	
-	public Chart(Participant participant)
+	public chart(Participant person)
 	{
-		this.participant = participant;
+		participant = person;
 		
 		calculateLineLengths();
-		calculateCoordinates();
+		//calculateCoordinates();
 	}
 	
 	public void calculateCoordinates()
@@ -46,16 +46,16 @@ public class Chart {
 	public void calculateLineLengths()
 	{
 		lineLengths[0] = participant.getCurrentBeers() * BRAIN_BEER + participant.getCurrentWine() * BRAIN_WINE+
-						+participant.getCurrentShots() * BRAIN_SHOT + participant.getCurrentCocktails() * BRAIN_COCKTAIL;
+						 participant.getCurrentShots() * BRAIN_SHOT + participant.getCurrentCocktails() * BRAIN_COCKTAIL;
 		
 		lineLengths[1] = participant.getCurrentBeers() * HEART_BEER + participant.getCurrentWine() * HEART_WINE+
-						+participant.getCurrentShots() * HEART_SHOT + participant.getCurrentCocktails() * HEART_COCKTAIL;
+						 participant.getCurrentShots() * HEART_SHOT + participant.getCurrentCocktails() * HEART_COCKTAIL;
 		
 		lineLengths[2] = participant.getCurrentBeers() * LIVER_BEER + participant.getCurrentWine() * LIVER_WINE+
-						+participant.getCurrentShots() * LIVER_SHOT + participant.getCurrentCocktails() * LIVER_COCKTAIL;
+						 participant.getCurrentShots() * LIVER_SHOT + participant.getCurrentCocktails() * LIVER_COCKTAIL;
 		
 		lineLengths[3] = participant.getCurrentBeers() * KIDNEY_BEER + participant.getCurrentWine() * KIDNEY_WINE+
-						+participant.getCurrentShots() * KIDNEY_SHOT + participant.getCurrentCocktails() * KIDNEY_COCKTAIL;
+						 participant.getCurrentShots() * KIDNEY_SHOT + participant.getCurrentCocktails() * KIDNEY_COCKTAIL;
 	}
 	
 	public void paint(Graphics2D myGraphic) 
@@ -63,5 +63,4 @@ public class Chart {
 		myGraphic.setColor(Color.CYAN);
 		myGraphic.drawPolygon(xPoints, yPoints, 4);
 	}
-
 }
