@@ -1,3 +1,5 @@
+import java.awt.*;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -8,7 +10,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,7 +17,6 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -31,22 +31,11 @@ public class QuizActivity extends JPanel implements ActionListener
 	private JPanel sidebar[];
 	private Container container;
 	
-	//Starting positions for the body
-	private final static int bodyPositionX = 175;
-	private final static int bodyPositionY = 100;
-	
-	//Image for the body
-	private Image bodyFigure;
-	private Image bodyPegs;
-	
 	//JLabel for questions
 	private JPanel sidebarHolder;
-	private int currentQuestion;
 	private JLabel questionLabel;
-	private JLabel answerA;
-	private JLabel answerB;
-	private JLabel answerC;
-	private JLabel answerD;
+	private JLabel rationaleLabel;
+	private JLabel rightWrongLabel;
 	private ButtonGroup answers;
 	private JRadioButton answerAButton;
 	private JRadioButton answerBButton;
@@ -70,14 +59,11 @@ public class QuizActivity extends JPanel implements ActionListener
 	private final static String caloriesLabelString = "<html><font color = '%s'> MY CALORIES: ";
 	private final static String fontHtmlCloser = "</font></html>";
 	
-	//Body Image Files
-	private final static String maleBodyFilepath = "../img/body_fill.png";
-	private final static String femaleBodyFilepath = "../img/female-w-trans.png";
-	private final static String bodyPegsFilepath = "../img/body_pegs.png";
-	
-	//Quiz questions
+	//Quiz
 	private Quiz quiz;
-	
+	private int currentQuestion;
+	private boolean isRationale;
+
 
 	//Constructor
 	public QuizActivity(Application passedApplication) throws IOException
@@ -87,15 +73,10 @@ public class QuizActivity extends JPanel implements ActionListener
 		//a custom container exclusive to MainActivity
 		application = passedApplication;
 
-		//counter
-		currentQuestion = 0;
-
-		//quiz
+		//quiz & counter
 		quiz = new Quiz();
-		
-		//Create image of the male body
-		bodyFigure = Toolkit.getDefaultToolkit().getImage(maleBodyFilepath);
-		bodyPegs = Toolkit.getDefaultToolkit().getImage(bodyPegsFilepath);
+		currentQuestion = 0;
+		isRationale = false;
 		
 		create();
 	}
@@ -105,34 +86,24 @@ public class QuizActivity extends JPanel implements ActionListener
 	{
 		System.out.println("QuizActivity::create()");
 		container = application.getMainFrame().getContentPane();
-
-		//Create the general accessor menu
-		FlowLayout quizLayout = new FlowLayout();
-		// quizLayout.setHgap(5);
-		
-		// sidebar = new JPanel[6];
-		
-		//Participant information with Flow Layout
-		FlowLayout infoLayout = new FlowLayout();
-		// infoLayout.setHgap(15);
-		navigation = new JPanel(infoLayout);
+		navigation = new JPanel();
 		
 		// panel on the right
 		sidebarHolder = new JPanel();
 		sidebarHolder.setLayout(new BoxLayout(sidebarHolder, BoxLayout.Y_AXIS));
+		// sidebarHolder.setLayout( new BorderLayout() );
+		// sidebarHolder.setLayout( new FlowLayout() );
+		sidebarHolder.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
 		
 		
 		// ----- END Alcohol Labels ----- //
 		
 		// -- Create buttons -> For INSERTS -- //
 		questionLabel = new JLabel("Question");
-		Dimension dim = new Dimension( 400, 20 );
-		questionLabel.setPreferredSize( dim );
-		
-		answerA = new JLabel("Answer A");
-		answerB = new JLabel("Answer B");
-		answerC = new JLabel("Answer C");
-		answerD = new JLabel("Answer D");
+		rationaleLabel = new JLabel("");
+		rightWrongLabel = new JLabel("");
+		rationaleLabel.setForeground(Color.DARK_GRAY);
+		rightWrongLabel.setForeground(Color.DARK_GRAY);
 
 		answerAButton = new JRadioButton("Answer A");
 		answerBButton = new JRadioButton("Answer B");
@@ -152,7 +123,7 @@ public class QuizActivity extends JPanel implements ActionListener
 
 		healthReportButton = new JButton("Health Report");
 		returnButton.addActionListener(this);
-		styleButton( returnButton );
+		styleButton( healthReportButton );
 
 	}
 
@@ -173,42 +144,42 @@ public class QuizActivity extends JPanel implements ActionListener
 		sidebarHolder.add(answerCButton);
 		sidebarHolder.add(answerDButton);
 		sidebarHolder.add(submitAnswer);
-		sidebarHolder.setAlignmentY(Component.LEFT_ALIGNMENT);
-
-		//Add all flow menus to side panel box layout
-		// for(int i = 0; i < sidebar.length; i++)
-		// {
-		// 	sidebar[i].setAlignmentY(Component.LEFT_ALIGNMENT);
-		// 	sidebarHolder.add(sidebar[i]);
-		// }
+		sidebarHolder.add(rightWrongLabel);
+		sidebarHolder.add(rationaleLabel);
 
 		//Add buttons to navigation
 		navigation.add(returnButton);
 		navigation.add(healthReportButton);
-		navigation.setBackground(Color.LIGHT_GRAY);
 
 		sidebarHolder.add(navigation);
 
 		//Work with container
-		container.setLayout(new BorderLayout());
-		container.add(sidebarHolder, BorderLayout.EAST);
+		container.setLayout(new FlowLayout());
+		container.add(sidebarHolder);
+		// container.add(temp, BoxLayout.Y_AXIS);
 
-		showQuestion();
+		container.setVisible(true);
 
+		showQuestion( isRationale );
 	}
 	
-	public void showQuestion() {
+	public void showQuestion( boolean rationale ) {
 		System.out.println("QuizActivity::showQuestion()");
 		
-		if ( currentQuestion == quiz.size() ) 
+		if ( isRationale ) {
+			System.out.println("QuizActivity::showQuestion()::rationale: " + quiz.get( currentQuestion ).getRationale());
+			rationaleLabel.setText( "Good job!" );
+			rationaleLabel.setText( quiz.get( currentQuestion ).getRationale() );
+		}
+		else if ( currentQuestion == quiz.size() ) 
 		{
-		
-			questionLabel.setText( quiz.DONE + quiz.getCorrect() + "/" + quiz.size() );
+			questionLabel.setText( quiz.DONE );
+			rationaleLabel.setText( "You got a " + quiz.getCorrect() + "/" + quiz.size() );
 
-			answerAButton.setText("");
-			answerBButton.setText("");
-			answerCButton.setText("");
-			answerDButton.setText("");
+			sidebarHolder.remove(answerAButton);
+			sidebarHolder.remove(answerBButton);
+			sidebarHolder.remove(answerCButton);
+			sidebarHolder.remove(answerDButton);
 			sidebarHolder.remove(submitAnswer);
 
 		} 
@@ -216,6 +187,8 @@ public class QuizActivity extends JPanel implements ActionListener
 		{
 			Question cur = quiz.get(currentQuestion);
 			int size = cur.size();
+
+			rationaleLabel.setText("");
 
 			answerAButton.setSelected( false );
 			answerBButton.setSelected( false );
@@ -226,13 +199,13 @@ public class QuizActivity extends JPanel implements ActionListener
 
 			questionLabel.setText( currentQuestion+1 + ". " + cur.getText() );
 
-			//if ( size > 1 )
+			if ( size > 0 )
 				answerAButton.setText( cur.getChoice(0) );
-			//if ( size > 2 )
+			if ( size > 1 )
 				answerBButton.setText( cur.getChoice(1) );
-			//if ( size > 3 )
+			if ( size > 2 )
 				answerCButton.setText( cur.getChoice(2) );
-			//if ( size > 4 )
+			if ( size > 3 )
 				answerDButton.setText( cur.getChoice(3) );
 
 		}
@@ -246,24 +219,6 @@ public class QuizActivity extends JPanel implements ActionListener
 		super.paintComponent(thisGraphic);
 		
 		Graphics2D rectGraphic = (Graphics2D) thisGraphic;
-		
-		//Set color for the base fill and draw the rectangle behind the figure
-		rectGraphic.setColor(Color.black);
-		rectGraphic.fillRect(bodyPositionX, bodyPositionY, bodyFigure.getWidth(this), bodyFigure.getHeight(this));
-		
-		//Draw image layer one
-		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
-		
-		//Updates the fill for the background color
-		// updateBodyFill(rectGraphic);
-		
-		//Draw image layer two
-		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
-		
-		//Draw layer three -> multiple layers prevent from access fill being
-		//shown on the edges
-		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
-		thisGraphic.drawImage(bodyPegs, bodyPositionX-150, bodyPositionY-5, this);
 	}
 	
 	
@@ -272,6 +227,8 @@ public class QuizActivity extends JPanel implements ActionListener
 	public void activate()
 	{
 		System.out.println("QuizActivity::activate()");
+		currentQuestion = 0;
+
 		//Re-initialize the GUI
 		initGUI();
 		
@@ -292,7 +249,6 @@ public class QuizActivity extends JPanel implements ActionListener
 	//Start the activity processing
 	public void begin() throws InterruptedException
 	{
-		// System.out.println("QuizActivity::begin()");
 		repaint();
 		Thread.sleep(10);
 	}
@@ -308,8 +264,10 @@ public class QuizActivity extends JPanel implements ActionListener
         //All data from the form
         if (command.equals("Next"))
         {
-        	currentQuestion++;
-        	showQuestion();
+        	if ( isRationale )
+	        	currentQuestion++;
+        	isRationale = !isRationale;
+        	showQuestion( isRationale );
         }
 
         handleNavigation( evt, command );

@@ -6,7 +6,7 @@ public class Quiz {
 	private ArrayList<Question> questions = new ArrayList<>();
 	private int numQuestions, numCorrect;
 
-	final static String DONE = "Congrats! You're done. You got a: ";
+	final static String DONE = "Congrats! You're done.";
 	
 	public Quiz()
 	{
