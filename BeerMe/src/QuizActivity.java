@@ -1,12 +1,14 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,6 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -197,7 +200,8 @@ public class QuizActivity extends JPanel implements ActionListener
 	public void showQuestion() {
 		System.out.println("QuizActivity::showQuestion()");
 		
-		if ( currentQuestion == quiz.size() ) {
+		if ( currentQuestion == quiz.size() ) 
+		{
 		
 			questionLabel.setText( quiz.DONE + quiz.getCorrect() + "/" + quiz.size() );
 
@@ -207,8 +211,9 @@ public class QuizActivity extends JPanel implements ActionListener
 			answerDButton.setText("");
 			sidebarHolder.remove(submitAnswer);
 
-		} else {
-
+		} 
+		else 
+		{
 			Question cur = quiz.get(currentQuestion);
 			int size = cur.size();
 
@@ -221,13 +226,13 @@ public class QuizActivity extends JPanel implements ActionListener
 
 			questionLabel.setText( currentQuestion+1 + ". " + cur.getText() );
 
-			if ( size > 1 )
+			//if ( size > 1 )
 				answerAButton.setText( cur.getChoice(0) );
-			if ( size > 2 )
+			//if ( size > 2 )
 				answerBButton.setText( cur.getChoice(1) );
-			if ( size > 3 )
+			//if ( size > 3 )
 				answerCButton.setText( cur.getChoice(2) );
-			if ( size > 4 )
+			//if ( size > 4 )
 				answerDButton.setText( cur.getChoice(3) );
 
 		}
