@@ -3,11 +3,16 @@ import java.util.ArrayList;
  
 public class Quiz {
  
+	//Questions contained
     private ArrayList<Question> questions = new ArrayList<>();
+    
+    //Holds quesion number and correct
     private int numQuestions, numCorrect;
  
+    //If done
     final static String DONE = "Congrats! You're done.";
      
+    //Default constructor
     public Quiz()
     {
         createQuestions();
@@ -15,24 +20,37 @@ public class Quiz {
         numCorrect = 0;
     }
  
-    public int size() {
+    //Get the size
+    public int size() 
+    {
         return numQuestions;
     }
-    public int getCorrect() {
+    
+    //Get number correct
+    public int getCorrect() 
+    {
         return numCorrect;
     }
      
+    //Increment correct
     public void incrementCorrect()
     {
         numCorrect++;
     }
-    public Question get( int i ) {
+    
+    //Get the question
+    public Question get( int i ) 
+    {
         return questions.get(i);
     }
+    
+    //Sets the number correct
     public void setNumCorrect(int i)
-        {numCorrect = 0;}
+    {
+    	numCorrect = 0;
+    }
  
- 
+    //Holds data of all the questions!!
     public void createQuestions()
     {
         String prompt, correct, rationale;

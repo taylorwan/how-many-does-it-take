@@ -1,7 +1,5 @@
 import java.applet.Applet;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -21,7 +19,6 @@ public class Application extends Applet
 	private QuizActivity quizActivity;
 	private HealthReport healthReport;
 	private HealthChart healthChart;
-	final String titleActivityFilePath = "img/intro.jpg";
 	
 	//Screen dimension constants
 	final static int screenWidth = 800;
@@ -30,7 +27,6 @@ public class Application extends Applet
 	//Application constructor
 	public Application() throws IOException
 	{
-		System.out.println("Application::Application()");
 		create();
 		initGUI();
 	}
@@ -38,7 +34,6 @@ public class Application extends Applet
 	//Internal application creation function
 	private void create() throws IOException
 	{
-		System.out.println("Application::create()");
 		
 		//Set the main Frame for the application
 		mainFrame = new JFrame();
@@ -58,10 +53,10 @@ public class Application extends Applet
 		healthReport = new HealthReport(this);
 		
 		//Create the main activity
-		mainActivity = new MainActivity(this, quizActivity, healthReport);
+		mainActivity = new MainActivity(this);
 		
 		//Create the title activity
-		titleActivity = new TitleActivity(titleActivityFilePath, this, mainActivity);
+		titleActivity = new TitleActivity(this);
 		
 		//Create the quiz activity
 		quizActivity = new QuizActivity(this);
@@ -74,7 +69,6 @@ public class Application extends Applet
 	//Creates all the GUI components
 	private void initGUI()
 	{
-		System.out.println("Application::initGUI()");
 		//Init GUI components of the JFrame
 		mainFrame.setLocation(0,0);
 		Color color = new Color(0,0,0,0);
@@ -88,7 +82,6 @@ public class Application extends Applet
 	//Main processing function
 	public static void main(String[] args) 
 	{
-		System.out.println("Application::main()");
 		
 		//Try application
 		try
@@ -120,7 +113,6 @@ public class Application extends Applet
 	{
 		try
 		{
-			System.out.println("Application::runApp()");
 			//Application Loop
 			while(true)
 			{
@@ -155,7 +147,6 @@ public class Application extends Applet
 	//Sets the current activity for application control
 	public void setCurrentActivity(CURRENT_ACTIVITY passedActivity)
 	{
-		System.out.println("Application::setCurrentActivity()");
 		currentActivity = passedActivity;
 		
 		switch(currentActivity)
@@ -184,7 +175,8 @@ public class Application extends Applet
 		return mainFrame;
 	}
 	
-	public <T> T getActivity(String thisActivity)
+	@SuppressWarnings("unchecked")
+	public <T> T getActivity(String thisActivity) throws IllegalArgumentException
 	{
 	   switch (thisActivity)
 	   {

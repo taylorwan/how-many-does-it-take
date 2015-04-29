@@ -5,6 +5,7 @@ import org.junit.Test;
 
 public class ParticipantTest {
 
+	//Test creating a participant
 	@Test
 	public void constructorTest() 
 	{
@@ -16,6 +17,7 @@ public class ParticipantTest {
 		assertEquals(person.getHoursDrinking(), 3.0, .1);
 	}
 	
+	//Tests setting the name
 	@Test
 	public void setNameTest()
 	{
@@ -26,6 +28,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting drinking hours
 	@Test
 	public void setHoursDrinkingTest()
 	{
@@ -36,6 +39,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting gender
 	@Test
 	public void setGenderTest()
 	{
@@ -46,6 +50,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting beers
 	@Test
 	public void setBeersTest()
 	{
@@ -56,6 +61,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting wine
 	@Test
 	public void setWineTest()
 	{
@@ -66,6 +72,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting shots
 	@Test
 	public void setShotTest()
 	{
@@ -76,6 +83,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting cocktails
 	@Test
 	public void setCocktailTest()
 	{
@@ -86,6 +94,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting calories
 	@Test
 	public void setCaloriesTest()
 	{
@@ -96,6 +105,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting BAC
 	@Test
 	public void setBACTest()
 	{
@@ -106,6 +116,7 @@ public class ParticipantTest {
 		
 	}
 	
+	//Tests setting drinks
 	@Test
 	public void totalDrinksTest()
 	{

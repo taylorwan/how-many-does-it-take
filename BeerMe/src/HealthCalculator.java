@@ -2,8 +2,6 @@ import java.util.ArrayList;
 
 public class HealthCalculator 
 {
-	//Alcohol Factory object
-	private final static AlcoholFactory alcoholFactory = new AlcoholFactory();
 	
 	//Formula specific constants -> calculating BAC
 	final static double COMBO_CONST = 5.14;
@@ -41,17 +39,17 @@ public class HealthCalculator
 	//Returns the liquid ounces of alcohol consumed
 	public static double calculateLiquidOunces(Participant thisParticipant)
 	{
-		double ouncesBeer = (thisParticipant.getCurrentBeers() * alcoholFactory.getOuncesPerDrink("Beer")) 
-							* alcoholFactory.getAlcoholContent("Beer");
+		double ouncesBeer = (thisParticipant.getCurrentBeers() * AlcoholFactory.getOuncesPerDrink("Beer")) 
+							* AlcoholFactory.getAlcoholContent("Beer");
 		
-		double ouncesWine = (thisParticipant.getCurrentWine() * alcoholFactory.getOuncesPerDrink("Wine")) 
-				* alcoholFactory.getAlcoholContent("Wine");
+		double ouncesWine = (thisParticipant.getCurrentWine() * AlcoholFactory.getOuncesPerDrink("Wine")) 
+				* AlcoholFactory.getAlcoholContent("Wine");
 		
-		double ouncesShot = (thisParticipant.getCurrentShots() * alcoholFactory.getOuncesPerDrink("Shot")) 
-				* alcoholFactory.getAlcoholContent("Shot");
+		double ouncesShot = (thisParticipant.getCurrentShots() * AlcoholFactory.getOuncesPerDrink("Shot")) 
+				* AlcoholFactory.getAlcoholContent("Shot");
 		
-		double ouncesCocktail = (thisParticipant.getCurrentCocktails() * alcoholFactory.getOuncesPerDrink("Cocktail")) 
-				* alcoholFactory.getAlcoholContent("Cocktail");
+		double ouncesCocktail = (thisParticipant.getCurrentCocktails() * AlcoholFactory.getOuncesPerDrink("Cocktail")) 
+				* AlcoholFactory.getAlcoholContent("Cocktail");
 		
 		return (ouncesBeer + ouncesWine + ouncesCocktail + ouncesShot);
 		
@@ -66,10 +64,10 @@ public class HealthCalculator
 		int currentShots = thisParticipant.getCurrentShots();
 		int currentCocktails = thisParticipant.getCurrentCocktails();
 		
-		return ( (currentBeer * alcoholFactory.getCalories("Beer")) + 
-				(currentWhine * alcoholFactory.getCalories("Wine")) + 
-				 (currentShots * alcoholFactory.getCalories("Shot"))) + 
-				 (currentCocktails * alcoholFactory.getCalories("Cocktail"));
+		return ( (currentBeer * AlcoholFactory.getCalories("Beer")) + 
+				(currentWhine * AlcoholFactory.getCalories("Wine")) + 
+				 (currentShots * AlcoholFactory.getCalories("Shot"))) + 
+				 (currentCocktails * AlcoholFactory.getCalories("Cocktail"));
 	}
 	
 	//Takes in participant and desired BAC, returns hours needed until that

@@ -3,55 +3,45 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 
-public class HealthCalculatorTest {
+public class HealthCalculatorTest 
+{
 
+	//Test getting total BAC
 	@Test
-	public void BACTest() 
+	public void testCalculateCalories() 
 	{
-		Participant newPerson = new Participant("Bob", 150, Participant.GENDER.MALE, 1);
-		newPerson.setCurrentBeers(3);
-		newPerson.setCurrentWine(1);
-		newPerson.setCurrentShots(2);
-		newPerson.setCurrentCocktails(0);
-				
-		assertEquals(HealthCalculator.calculateBAC(newPerson), .154, .001);
+		Participant participant = new Participant("Daniel", 155, Participant.GENDER.MALE, 1);
+		participant.setCurrentBeers(2);
+		participant.setCurrentWine(2);
+		participant.setCurrentCocktails(2);
+		participant.setCurrentShots(3);
 		
+		assertEquals(1228, HealthCalculator.caluclateCalories(participant));
 	}
 	
+	//Test getting total BAC -> For a female
 	@Test
-	public void ouncesTest()
+	public void testCalculateBACFemale() 
 	{
-		Participant newPerson = new Participant("Bob", 150, Participant.GENDER.MALE, 1);
-		newPerson.setCurrentBeers(3);
-		newPerson.setCurrentWine(1);
-		newPerson.setCurrentShots(2);
-		newPerson.setCurrentCocktails(0);
-				
-		assertEquals(HealthCalculator.calculateLiquidOunces(newPerson), 3.6, .001);
+		Participant participant = new Participant("Taylor", 100, Participant.GENDER.FEMALE, 1);
+		participant.setCurrentBeers(2);
+		participant.setCurrentWine(2);
+		participant.setCurrentShots(3);
+		
+		assertEquals(0.3120, HealthCalculator.calculateBAC(participant), .001);
 	}
 	
+	//Test getting total BAC -> For a male
 	@Test
-	public void caloriesTest()
+	public void testCalculateBACMale() 
 	{
-		Participant newPerson = new Participant("Bob", 150, Participant.GENDER.MALE, 1);
-		newPerson.setCurrentBeers(3);
-		newPerson.setCurrentWine(1);
-		newPerson.setCurrentShots(2);
-		newPerson.setCurrentCocktails(0);
-				
-		assertEquals(HealthCalculator.caluclateCalories(newPerson), 702, .001);
-	}
-	
-	@Test
-	public void hoursTest()
-	{
-		Participant newPerson = new Participant("Bob", 150, Participant.GENDER.MALE, 1);
-		newPerson.setCurrentBeers(3);
-		newPerson.setCurrentWine(1);
-		newPerson.setCurrentShots(2);
-		newPerson.setCurrentCocktails(0);
-				
-		assertEquals(HealthCalculator.calculateHoursNeeded(newPerson, 0.0), 0.0, .001);
+		Participant participant = new Participant("Daniel", 155, Participant.GENDER.MALE, 1);
+		participant.setCurrentBeers(2);
+		participant.setCurrentWine(2);
+		participant.setCurrentCocktails(2);
+		participant.setCurrentShots(3);
+		
+		assertEquals(0.2266, HealthCalculator.calculateBAC(participant), .001);
 	}
 
 }

@@ -196,11 +196,17 @@ html {
 
 /* app */
 
+.app {
+    margin-top: 2em;
+}
 .app .instructions ol {
     text-align: left;
 }
 .app .instructions ol li {
     padding-left: .5em;
+}
+.app object {
+    margin-left: 100px;
 }
 
 

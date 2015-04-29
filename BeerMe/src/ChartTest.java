@@ -5,6 +5,7 @@ import org.junit.Test;
 public class ChartTest {
 
 	
+	//Test function for chart constructor
 	@Test
 	public void chartConstructor() 
 	{
@@ -14,7 +15,7 @@ public class ChartTest {
 		assertEquals(newChart.participant.getName(), "Bob");
 	}
 	
-	
+	//Test function for line lengths
 	@Test
 	public void lineLengthTest() 
 	{
@@ -34,6 +35,8 @@ public class ChartTest {
 		assertEquals(newChart.lineLengths[3], 33.0, 0.01);
 	}
 	
+	
+	//Test function for calculating  coordinates
 	@Test
 	public void coordinateTest()
 	{

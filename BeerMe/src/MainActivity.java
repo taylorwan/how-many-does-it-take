@@ -4,7 +4,6 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,18 +18,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 
-public class MainActivity extends JPanel implements ActionListener
+public class MainActivity extends JPanel implements ActionListener, Activity
 {
-	
-	//Different alcohol types
-	private final static AlcoholFactory alcoholFactory = new AlcoholFactory();
 	
 	//Main application for Activity Navigation
 	private Application application;
-	private QuizActivity quizActivity;
-	private HealthReport healthReport;
 	private JPanel alcoholAccessorMenu[];
 	private Container container;
 	
@@ -45,7 +40,8 @@ public class MainActivity extends JPanel implements ActionListener
 	//Panel for holding participant info
 	private JPanel participantInfo;
 	private JPanel alcoholMenu;
-	JLabel bacLabel;
+	private JLabel hoverTipLabel;
+	private JLabel bacLabel;
 	private JLabel caloriesLabel;
 	
 	//JLabel for icons that have hover over ability along with
@@ -77,7 +73,8 @@ public class MainActivity extends JPanel implements ActionListener
 	private final static double maxBAC = .30;
 	private final static double drivingLimit = .08;
 	private final static double limitTwo = .12;
-	private final static double limitThree = .20;
+	private final static double limitThree = .16;
+	private final static double limitFour = .20;
 	
 	//Constant Strings
 	private final static String bacLabelString = "<html><font color = '%s'> MY BAC: ";
@@ -86,19 +83,26 @@ public class MainActivity extends JPanel implements ActionListener
 	private final static String maleBodyFilepath = "img/body_fill.png";
 	private final static String femaleBodyFilepath = "img/female-w-trans.png";
 	private final static String bodyPegsFilepath = "img/body_pegs.png";
+	private final static String hoverTipString = "<html><font color = 'black'> "
+												 + "*Hover over alcohol icons for specific details->"
+												 + "</font></html>";
 	
 	//Consumption Quantity Character
 	private final static String consumptionQuantityChar = "x";
 	
 	//Informational Strings for hover overs
 	private final static String beerHoverOver = "<html><font face='sansserif' color='black'>"
-												+ "Beer <br>Calories: %s <br>Ounces: %s</html>";
+												+ "Beer <br>Calories: %s <br>Ounces: %s <br>Content %s"
+												+ "</html>";
 	private final static String wineHoverOver = "<html><font face='sansserif' color='black'>"
-												+ "Wine <br> Calories: %s <br> Ounces: %s</html>";;
+												+ "Wine <br> Calories: %s <br> Ounces: %s <br>Content %s"
+												+ "</html>";;
 	private final static String shotHoverOver = "<html><font face='sansserif' color='black'>"
-												+ "Shot <br> Calories: %s <br> Ounces: %s</html>";;
+												+ "Shot <br> Calories: %s <br> Ounces: %s <br>Content %s"
+												+ "</html>";;
 	private final static String cocktailHoverOver = "<html><font face='sansserif' color='black'>"
-												+ "Cocktail <br> Calories: %s <br> Ounces: %s</html>";;
+												+ "Cocktail <br> Calories: %s <br> Ounces: %s <br>Content %s"
+												+ "</html>";;
 	
 	//Activity Navigation
 	private JPanel navigation;
@@ -110,14 +114,11 @@ public class MainActivity extends JPanel implements ActionListener
 	private Participant participant;
 	
 	//Constructor
-	public MainActivity(Application passedApplication, QuizActivity passedQuizActivity, HealthReport passedHealthReport) throws IOException
+	public MainActivity(Application passedApplication) throws IOException
 	{
-		System.out.println("MainActivity::MainActivity()");
 		//Set the application and use it to create 
 		//a custom container exclusive to MainActivity
 		application = passedApplication;
-		quizActivity = passedQuizActivity;
-		healthReport = passedHealthReport;
 		
 		//Create image of the male body
 		bodyFigure = Toolkit.getDefaultToolkit().getImage(maleBodyFilepath);
@@ -127,9 +128,9 @@ public class MainActivity extends JPanel implements ActionListener
 	}
 	
 	//create all components of MainActivity
-	private void create() throws IOException
+	public void create()
 	{
-		System.out.println("MainActivity::create()");
+		setLayout(null);
 		
 		//Create the general accessor menu
 		FlowLayout buttonLayout = new FlowLayout();
@@ -165,6 +166,8 @@ public class MainActivity extends JPanel implements ActionListener
 		//Create the labels, which later will be dynamic
 		bacLabel = new JLabel(bacLabelString);
 		caloriesLabel = new JLabel(caloriesLabelString);
+		hoverTipLabel = new JLabel(hoverTipString);
+		hoverTipLabel.setBounds(10, Application.screenHeight-60,325,50);
 		
 		// ----- Alcohol labels ----- //
 		
@@ -173,8 +176,10 @@ public class MainActivity extends JPanel implements ActionListener
 		beerLabel = new JLabel(beerIcon);
 		
 		//Create hover over
-		String thisHover = String.format(beerHoverOver, alcoholFactory.getCalories("Beer"),
-				alcoholFactory.getOuncesPerDrink("Beer"));
+		String thisHover = String.format(beerHoverOver, AlcoholFactory.getCalories("Beer"),
+										AlcoholFactory.getOuncesPerDrink("Beer"), 
+										AlcoholFactory.getAlcoholContent("Beer"));
+		
 		beerLabel.setToolTipText(thisHover);
 		
 		//Add label
@@ -185,8 +190,10 @@ public class MainActivity extends JPanel implements ActionListener
 		wineLabel = new JLabel(wineIcon);
 		
 		//Create hover over
-		thisHover = String.format(wineHoverOver,alcoholFactory.getCalories("Wine"),
-								 alcoholFactory.getOuncesPerDrink("Wine"));
+		thisHover = String.format(wineHoverOver,AlcoholFactory.getCalories("Wine"),
+								 AlcoholFactory.getOuncesPerDrink("Wine"), 
+								 AlcoholFactory.getAlcoholContent("Wine"));
+		
 		wineLabel.setToolTipText(thisHover);
 		
 		//Add label
@@ -198,8 +205,10 @@ public class MainActivity extends JPanel implements ActionListener
 		shotLabel = new JLabel(shotIcon);
 		
 		//Create hover over
-		thisHover = String.format(shotHoverOver,alcoholFactory.getCalories("Shot"),
-				 alcoholFactory.getOuncesPerDrink("Shot"));
+		thisHover = String.format(shotHoverOver, AlcoholFactory.getCalories("Shot"),
+				 				 AlcoholFactory.getOuncesPerDrink("Shot"), 
+				 				 AlcoholFactory.getAlcoholContent("Shot"));
+		
 		shotLabel.setToolTipText(thisHover);
 		
 		//Add label
@@ -210,8 +219,10 @@ public class MainActivity extends JPanel implements ActionListener
 		cocktailLabel = new JLabel(cocktailIcon);
 		
 		//Create hover over
-		thisHover = String.format(cocktailHoverOver,alcoholFactory.getCalories("Cocktail"),
-				 alcoholFactory.getOuncesPerDrink("Cocktail"));
+		thisHover = String.format(cocktailHoverOver, AlcoholFactory.getCalories("Cocktail"),
+				 				  AlcoholFactory.getOuncesPerDrink("Cocktail"),
+				 				  AlcoholFactory.getAlcoholContent("Cocktail"));
+		
 		cocktailLabel.setToolTipText(thisHover);
 		
 		//Add label
@@ -222,65 +233,65 @@ public class MainActivity extends JPanel implements ActionListener
 		// -- Create buttons -> For INSERTS -- //
 		addBeer = new JButton("+BEER");
 		addBeer.addActionListener(this);
-		styleButton( addBeer );
+		ComponentStyler.styleButton( addBeer );
 		alcoholAccessorMenu[0].add(addBeer);
 		
 		addWine = new JButton("+WINE");
 		addWine.addActionListener(this);
-		styleButton( addWine );
+		ComponentStyler.styleButton( addWine );
 		alcoholAccessorMenu[1].add(addWine);
 		
 		addShot = new JButton("+SHOT");
 		addShot.addActionListener(this);
-		styleButton( addShot );
+		ComponentStyler.styleButton( addShot );
 		alcoholAccessorMenu[2].add(addShot);
 		
 		addCocktail = new JButton("+COCKTAIL");
 		addCocktail.addActionListener(this);
-		styleButton( addCocktail );
+		ComponentStyler.styleButton( addCocktail );
 		alcoholAccessorMenu[3].add(addCocktail);
 		
 		//Create buttons -> For REMOVALS
 		removeBeer = new JButton("-BEER");
 		removeBeer.addActionListener(this);
-		styleButton( removeBeer );
+		ComponentStyler.styleButton( removeBeer );
 		alcoholAccessorMenu[0].add(removeBeer);
 		
 		removeWine = new JButton("-WINE");
 		removeWine.addActionListener(this);
-		styleButton( removeWine );
+		ComponentStyler.styleButton( removeWine );
 		alcoholAccessorMenu[1].add(removeWine);
 		
 		removeShot = new JButton("-SHOT");
 		removeShot.addActionListener(this);
-		styleButton( removeShot );
+		ComponentStyler.styleButton( removeShot );
 		alcoholAccessorMenu[2].add(removeShot);
 		
 		removeCocktail = new JButton("-COCKTAIL");
 		removeCocktail.addActionListener(this);
-		styleButton( removeCocktail );
+		ComponentStyler.styleButton( removeCocktail );
 		alcoholAccessorMenu[3].add(removeCocktail);
 		
 		//Navigation Button
 		returnButton = new JButton("Return");
 		returnButton.addActionListener(this);
-		styleButton( returnButton );
+		ComponentStyler.styleButton( returnButton );
 		
 		healthReportButton = new JButton("Health Report");
 		healthReportButton.addActionListener(this);
-		styleButton( healthReportButton );
+		ComponentStyler.styleButton( healthReportButton );
 
 		quizButton = new JButton("Quiz");
 		quizButton.addActionListener(this);
-		styleButton( quizButton );
+		ComponentStyler.styleButton( quizButton );
 		
 	}
 	
 	//Create the GUI
-	private void initGUI()
+	public void initGUI()
 	{
 
-		System.out.println("MainActivity::initGUI()");
+		
 		//Reset all text components
 		beerLabel.setText(consumptionQuantityChar + participant.getCurrentBeers());
 		wineLabel.setText(consumptionQuantityChar + participant.getCurrentWine());
@@ -319,6 +330,7 @@ public class MainActivity extends JPanel implements ActionListener
 		
 		//Add to the top of the east panel
 		alcoholMenu.add(participantInfo);
+		add(hoverTipLabel);
 		
 		//Add all flow menus to side panel box layout
 		for(int i = 0; i < alcoholAccessorMenu.length; i++)
@@ -337,7 +349,6 @@ public class MainActivity extends JPanel implements ActionListener
 	@Override
 	protected void paintComponent(Graphics thisGraphic)
 	{
-		// System.out.println("MainActivity::paintComponent()");
 		
 		super.paintComponent(thisGraphic);
 		
@@ -361,21 +372,13 @@ public class MainActivity extends JPanel implements ActionListener
 		thisGraphic.drawImage(bodyFigure, bodyPositionX, bodyPositionY, this);
 		thisGraphic.drawImage(bodyPegs, bodyPositionX-150, bodyPositionY-5, this);
 		
-        int xPoly[] = {150, 250, 325, 375, 450, 275, 100};
-        int yPoly[] = {150, 100, 125, 225, 250, 375, 300};
-        
-//        Polygon poly = new Polygon(xPoly, yPoly, xPoly.length);
-//        thisGraphic.setColor(Color.BLUE);
-//        thisGraphic.drawPolygon(poly);
-        Chart test = new Chart(participant);
-        test.paint(rectGraphic);
-		
         
 	}
 	
+	//Returns the state of the BAC based on different ranges, each
+	//one equates to a different level
 	private int getBACState()
 	{
-		// System.out.println("MainActivity::getBACState()");
 		//Decide fill color based on heights, etc
 		if(participant.getCurrentBAC() < drivingLimit)
 		{
@@ -389,17 +392,21 @@ public class MainActivity extends JPanel implements ActionListener
 		{
 			return 3;
 		}
-		else if(participant.getCurrentBAC() >= limitThree)
+		else if(participant.getCurrentBAC() >= limitThree && participant.getCurrentBAC() < limitFour)
 		{
 			return 4;
+		}
+		else if(participant.getCurrentBAC() >= limitFour)
+		{
+			return 5;
 		}
 		
 		return -1;
 	}
 	
+	//Updates the fill of the users body
 	private void updateBodyFill(Graphics2D rectGraphic)
 	{
-		// System.out.println("MainActivity::updateBodyFill()");
 		//Calculate the max height
 		final double maxHeight = (double) bodyFigure.getHeight(this);
 		
@@ -420,6 +427,11 @@ public class MainActivity extends JPanel implements ActionListener
 			rectGraphic.setColor(Color.orange);
 		}
 		else if(getBACState() == 4)
+		{
+			Color color = new Color(255, 108, 0);
+			rectGraphic.setColor(color);
+		}
+		else if(getBACState() == 5)
 		{
 			rectGraphic.setColor(Color.red);
 		}
@@ -442,8 +454,7 @@ public class MainActivity extends JPanel implements ActionListener
 	//Makes panel visible and sets applications
 	//current activity
 	public void activate()
-	{
-		System.out.println("MainActivity::activate()");
+	{	
 		//Re-initialize the GUI
 		initGUI();
 		
@@ -454,8 +465,8 @@ public class MainActivity extends JPanel implements ActionListener
 	
 	//Call before changing activities
 	public void deactivate()
-	{
-		System.out.println("MainActivity::deactivate()");
+	{	
+		
 		container.removeAll();
 		application.getMainFrame().getContentPane().remove(this);
 		container.setVisible(false);
@@ -464,7 +475,6 @@ public class MainActivity extends JPanel implements ActionListener
 	//Start the activity processing
 	public void begin() throws InterruptedException
 	{
-		// System.out.println("MainActivity::begin()");	
 		repaint();
 		Thread.sleep(10);
 	}
@@ -472,7 +482,6 @@ public class MainActivity extends JPanel implements ActionListener
 	//Set the participant
 	public void setParticipant(Participant passedParticipant)
 	{
-		System.out.println("MainActivity::setParticipant()");
 		participant = passedParticipant;
 		bacLabel.setText(bacLabelString + participant.getCurrentBAC());
 		caloriesLabel.setText(caloriesLabelString + participant.getCurrentCalories());
@@ -483,7 +492,6 @@ public class MainActivity extends JPanel implements ActionListener
 	{
 
         String command = evt.getActionCommand();
-		System.out.println( "MainActivity::actionPerformed() with command " + command );
         
         //If user chooses to add or remove Beer
         if (command.equals("+BEER"))
@@ -533,7 +541,6 @@ public class MainActivity extends JPanel implements ActionListener
 	//Handles navigation between activities
 	private void handleNavigation(ActionEvent evt, String command)
 	{
-		System.out.println("MainActivity::handleNavigation()");
 
         //----- Navigation ----- //
         if(command.equals("Return"))	//--> Returns to MainActivity
@@ -543,23 +550,42 @@ public class MainActivity extends JPanel implements ActionListener
         }
         else if(command.equals("Health Report"))	//--> Navigates to HealthReportActivity
         {
-        	System.out.println("clicked health report");
         	deactivate();
+        	
+        	//Find the healthreport and give it the participant
+        	HealthReport healthReport = (HealthReport) application.getActivity("healthReport");
+        	HealthChart healthChart = (HealthChart) application.getActivity("healthChart");
+        	
+        	//Give health report the participant
         	healthReport.setParticipant(participant);
+        	
+        	//Also check for existing labels
+        	healthChart.removeAll();
+        	
+    		//Create labels and give them to the chart activity
+    		ArrayList<JLabel> labels = new ArrayList<JLabel>();
+    		labels.add(beerLabel);
+    		labels.add(wineLabel);
+    		labels.add(shotLabel);
+    		labels.add(cocktailLabel);
+    		
+    		//Give labels to the health chart
+    		healthChart.giveLabels(labels);
+        	
+        	//Set activity to navigate to the health report
         	application.setCurrentActivity(Application.CURRENT_ACTIVITY.HEALTH_REPORT);
         	
         }
         else if(command.equals("Quiz"))	//--> Navigates to QuizActivity
         {
-        	// quizActivity.setParticipant(participant);
         	deactivate();
         	application.setCurrentActivity(Application.CURRENT_ACTIVITY.QUIZ);
         }
 	}
 	
+	//Add alcohol given some enum
 	private void addAlcohol(AlcoholFactory.ALCOHOL_TYPE whichAlcohol)
 	{
-		System.out.println("MainActivity::addAlcohol()");
 		//If maximum alcohol is reached
 		if(participant.getCurrentBAC() >= .3 )
 		{
@@ -608,9 +634,9 @@ public class MainActivity extends JPanel implements ActionListener
     	updateCaloriesText(participant.getCurrentCalories()); 
 	}
 	
+	//Remove alcohol given some enum
 	private void removeAlcohol(AlcoholFactory.ALCOHOL_TYPE whichAlcohol)
 	{
-		System.out.println("MainActivity::removeAlcohol()");
 		//Decide which alcohol to alter
 		switch(whichAlcohol)
 		{
@@ -652,28 +678,19 @@ public class MainActivity extends JPanel implements ActionListener
     	updateCaloriesText(participant.getCurrentCalories()); 
 	}
 	
+	//Updates the text given a string of the BAC
 	private void updateBACText(String participantBAC)
 	{
-		// System.out.println("MainActivity::updateBACText()");
 		String result = bacLabelString + participantBAC + fontHtmlCloser;
 		bacLabel.setText(String.format(result, "white"));
 		
 	}
 	
+	//Updates the calories given a string of the participant calories
 	private void updateCaloriesText(int participantCalories)
 	{
-		// System.out.println("MainActivity::updateCaloriesText()");
 		String result = caloriesLabelString + participantCalories + fontHtmlCloser;
 		caloriesLabel.setText(String.format(result, "white"));
 		
-	}
-
-	public void styleButton( JButton button ) {
-		button.setBorderPainted( false );
-		button.setFocusPainted( false );
-		button.setContentAreaFilled( false );
-		button.setOpaque( true );
-		button.setBackground( new Color( 69, 50, 9 ) );
-		button.setForeground( Color.WHITE );	
 	}
 }

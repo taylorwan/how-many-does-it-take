@@ -1,12 +1,11 @@
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -40,13 +39,14 @@ public class HealthReport extends JPanel implements ActionListener
 	private final static String currentParticipantBAC = "Current BAC Level: ";
 	private final static String hoursNeededTillDrivable = "Hours Till Can Drive: ";
 	private final static String hoursNeededTillSober = "Hours Till Sober: ";
+	private final static String headerOne = "Hours After";
+	private final static String headerTwo = "Your BAC";
 	
 	//Main participant
 	private Participant participant;
 	
 	public HealthReport(Application passedApplication)
 	{
-		System.out.println("HealthReport::HealthReport()");
 		application = passedApplication;
 		reportList = new ArrayList<JLabel>();
 		
@@ -56,7 +56,6 @@ public class HealthReport extends JPanel implements ActionListener
 	
 	public void create()
 	{
-		System.out.println("HealthReport::create()");
 		
 		container = application.getMainFrame().getContentPane();
 		postReport = new JPanel();
@@ -88,7 +87,6 @@ public class HealthReport extends JPanel implements ActionListener
 	
 	public void initGUI()
 	{	
-		System.out.println("HealthReport::initGUI()");
 		remove(returnButton);
 		
 		//Add buttons to the navigation
@@ -105,7 +103,6 @@ public class HealthReport extends JPanel implements ActionListener
 	//current activity
 	public void activate()
 	{
-		System.out.println("HealthReport::activate()");
 		//Re-initialize the GUI
 		initGUI();
 		
@@ -117,7 +114,6 @@ public class HealthReport extends JPanel implements ActionListener
 	
 	public void deactivate()
 	{
-		System.out.println("HealthReport::deactivate()");
     	clearLists();
     	historyReport.removeAll();
 		container.removeAll();
@@ -128,10 +124,13 @@ public class HealthReport extends JPanel implements ActionListener
 	
 	private void createDataFromPartcipant()
 	{
-		System.out.println("HealthReport::createDataFromParticipant()");
+		
+    	DecimalFormat tempBAC = new DecimalFormat("#0.0000");
+    	String newBAC = tempBAC.format(participant.getCurrentBAC());
+    	
 		reportList.add(new JLabel(String.format(header, participant.getName())));
 		reportList.add(new JLabel(breaker));
-		reportList.add(new JLabel(currentParticipantBAC + participant.getCurrentBAC()));
+		reportList.add(new JLabel(currentParticipantBAC + newBAC));
 		reportList.add(new JLabel(hoursNeededTillDrivable + Double.toString(HealthCalculator.calculateHoursNeeded(participant, .08))));
 		reportList.add(new JLabel(hoursNeededTillSober + HealthCalculator.calculateHoursNeeded(participant, 0)));
 		
@@ -147,40 +146,38 @@ public class HealthReport extends JPanel implements ActionListener
 		
 		
 		container.add(postReport, BorderLayout.WEST);
-		container.add(returnButton, BorderLayout.SOUTH);
+		container.add(navigation, BorderLayout.SOUTH);
 		
 	}
 	
 	private void createHistoryReport()
 	{
-		System.out.println("HealthReport::createHistoryReport()");
 		FlowLayout simpleLayout = new FlowLayout();
 		simpleLayout.setHgap(15);
 		
 		ArrayList<SobrietyProjectionCell> reportValues = HealthCalculator.calculateHoursWithBACs(participant, 0); 
 
 		JPanel easyPanel = new JPanel(simpleLayout);
-		easyPanel.add(new JLabel("<html>Projected <br> Hourly <br> Progression</html>"));
-		easyPanel.add(new JLabel("<html>After <br> Allotted <br> Hours</html>"));
+		easyPanel.add(new JLabel(headerOne));
+		easyPanel.add(new JLabel(headerTwo));
 		historyReport.add(easyPanel);
 		
-		System.out.println("HealthReport::createHistoryReport()::reportValues.size(): " + reportValues.size());
 		//Find and insert the history report
 		for(int i = 0; i < reportValues.size(); i++)
 		{
+	    	DecimalFormat tempBAC = new DecimalFormat("#0.0000");
+	    	String newBAC = tempBAC.format(reportValues.get(i).getBAC());
 			easyPanel = new JPanel(simpleLayout);
 			easyPanel.add(new JLabel("HOURS: " + reportValues.get(i).getNumberOfHours()));
-			easyPanel.add(new JLabel("BAC: " + reportValues.get(i).getBAC()));
+			easyPanel.add(new JLabel("BAC: " + newBAC));
 			historyReport.add(easyPanel);
 		}
 		
-		System.out.println("HealthReport::createHistoryReport()::after for loop");
 		container.add(historyReport, BorderLayout.EAST);
 	}
 	
 	public void setParticipant(Participant passedParticipant)
 	{
-		System.out.println("HealthReport::setParticipant()");
 		participant = passedParticipant;
 		
 	}
@@ -188,7 +185,6 @@ public class HealthReport extends JPanel implements ActionListener
 	//Implemented Action Listener Function
 	public void actionPerformed(ActionEvent evt) 
 	{
-		System.out.println("HealthReport::actionPerformed()");
         String command = evt.getActionCommand();
         
         //If user chooses to add or remove Beer
@@ -197,7 +193,7 @@ public class HealthReport extends JPanel implements ActionListener
         	deactivate();
         	
         	//Set the current activity to the main activity
-        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.HEALTH_REPORT);
+        	application.setCurrentActivity(Application.CURRENT_ACTIVITY.MAIN);
         }
         if(command.equals("Health Chart"))
         {
@@ -215,13 +211,11 @@ public class HealthReport extends JPanel implements ActionListener
 	
 	private void clearLists()
 	{
-		System.out.println("HealthReport::clearLists()");
 		reportList.clear();
 	}
 	
 	public void begin() throws InterruptedException
 	{
-		System.out.println("Inside HealthReport::Begin()");
 		repaint();
 		Thread.sleep(10);
 	}
@@ -229,7 +223,6 @@ public class HealthReport extends JPanel implements ActionListener
 	@Override
 	protected void paintComponent(Graphics thisGraphic)
 	{
-		System.out.println("Inside HealthReport::PaintComponent()");
 		super.paintComponent(thisGraphic);
 	}
 
